@@ -1,0 +1,134 @@
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #ece5dd;
+}
+
+/* 🔹 HEADER */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #075e54;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.chat-header img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* status text */
+.status-text {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* 🔹 CHAT BOX */
+.chat-box {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* empty state */
+.empty {
+  text-align: center;
+  color: #777;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* 🔹 MESSAGES */
+.message {
+  max-width: 75%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+}
+
+/* user message */
+.my-message {
+  align-self: flex-end;
+  background: #dcf8c6;
+}
+
+/* timestamp */
+.message small {
+  font-size: 10px;
+  color: gray;
+  margin-top: 4px;
+  align-self: flex-end;
+}
+
+/* 🔥 LOCK WARNING (NEW - IMPORTANT) */
+.lock-warning {
+  background: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 10px;
+  border: 1px solid #ffeeba;
+}
+
+/* 🔹 INPUT AREA */
+.chat-input {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #ddd;
+}
+
+/* input field */
+.chat-input input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+}
+
+/* send button */
+.chat-input button {
+  padding: 10px 16px;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chat-input button:hover {
+  background: #1ebe5d;
+}
+
+/* 🔒 disabled input styling */
+.chat-input input:disabled {
+  background: #f2f2f2;
+  cursor: not-allowed;
+}
