@@ -1,0 +1,86 @@
+/* Page Layout */
+.container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover Effect */
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Image */
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+/* Name */
+.card h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+/* Bio */
+.card p {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Button container */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* Buttons */
+button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Dislike */
+.dislike {
+  background: #ff4d4d;
+  color: white;
+}
+
+.dislike:hover {
+  background: #e63939;
+  transform: scale(1.1);
+}
+
+/* Like */
+.like {
+  background: #00c853;
+  color: white;
+}
+
+.like:hover {
+  background: #00a844;
+  transform: scale(1.1);
+}
