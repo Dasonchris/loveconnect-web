@@ -15,7 +15,7 @@
   padding: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  cursor: pointer;
+  text-align: center;
 }
 
 /* Hover Effect */
@@ -83,4 +83,76 @@ button {
 .like:hover {
   background: #00a844;
   transform: scale(1.1);
+}
+
+/* POPUP OVERLAY */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* POPUP BOX */
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 320px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Inputs */
+.popup input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+.popup input:focus {
+  border-color: #00c853;
+}
+
+/* Register button */
+.register-btn {
+  background: #ff4d6d;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.register-btn:hover {
+  background: #e63b5c;
+}
+
+/* Close button */
+.close-btn {
+  margin-top: 10px;
+  background: #ccc;
+}
+
+.close-btn:hover {
+  background: #bbb;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

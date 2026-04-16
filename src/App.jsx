@@ -7,6 +7,7 @@ import Marketplace from "./pages/Marketplace";
 import Community from "./pages/Community";
 import SelfChat from "./pages/SelfChat";
 import Chat from "./pages/Chat";
+// import Chat from "./Chat";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/community" element={<Community />} />
           <Route path="/self-chat" element={<SelfChat />} />
           <Route path="/chat/:id" element={<Chat />} />
+           <Route path="/chat/:userId" element={<Chat />} />
         </Routes>
       </div>
     </BrowserRouter>

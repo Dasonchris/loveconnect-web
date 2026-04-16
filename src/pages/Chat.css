@@ -12,7 +12,7 @@
   align-items: center;
   gap: 10px;
   padding: 12px;
-  background: #075e54;
+  background: rgb(53, 86, 3);
   color: white;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
