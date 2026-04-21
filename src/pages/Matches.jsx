@@ -30,6 +30,107 @@ export default function Matches() {
       lastMessage: "Let’s meet this weekend!",
       online: false,
     },
+        {
+      id: 3,
+      name: "Kwame",
+      age: 30,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s have fun tonight!",
+      online: false,
+    },
+            {
+      id: 4,
+      name: "Kwabena",
+      age: 35,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s go to church!",
+      online: true,
+    },
+
+            {
+      id: 5,
+      name: "Kwabenya",
+      age: 39,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do things!",
+      online: false,
+    },
+
+      {
+      id: 6,
+      name: "Kwabenya",
+      age: 20,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: true,
+      },
+
+            {
+      id: 7,
+      name: "Korsi",
+      age: 22,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: true,
+      },
+            {
+      id: 7,
+      name: "Kwabenya",
+      age: 25,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: false,
+      },
+            {
+      id: 8,
+      name: "Kwabenya",
+      age: 28,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: true,
+      },
+
+      // extra five
+            {
+      id: 9,
+      name: "Kordzo",
+      age: 20,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: true,
+      },
+            {
+      id: 10,
+      name: "Kweku",
+      age: 20,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: true,
+      },
+            {
+      id: 11,
+      name: "Kobby",
+      age: 20,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: true,
+      },
+            {
+      id: 12,
+      name: "Kelvin",
+      age: 21,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: true,
+      },
+            {
+      id: 13,
+      name: "Kwesi",
+      age: 26,
+      image: "https://via.placeholder.com/300",
+      lastMessage: "Let’s do movie night!",
+      online: false,
+      }
   ]);
 
   const openChat = (match) => {

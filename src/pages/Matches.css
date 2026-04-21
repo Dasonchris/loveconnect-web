@@ -1,12 +1,24 @@
-/* Container */
+/* =========================
+   Font Import
+========================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+
+/* =========================
+   Container
+========================= */
 .matches-container {
   padding: 24px;
   min-height: 100vh;
   background: linear-gradient(to bottom right, #f9fafb, #eef2ff);
-  font-family: "Segoe UI", sans-serif;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
 }
 
-/* Title */
+
+/* =========================
+   Title
+========================= */
 .matches-title {
   font-size: 28px;
   font-weight: 700;
@@ -14,139 +26,56 @@
   color: #111827;
 }
 
-/* Empty state */
+
+/* =========================
+   Empty State
+========================= */
 .empty-state {
   text-align: center;
   margin-top: 60px;
   color: #6b7280;
   font-size: 16px;
+  grid-column: 1 / -1;        /* spans full grid if inside grid */
 }
 
-/* Grid */
+
+/* =========================
+   Grid
+========================= */
 .matches-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px;
 }
 
-/* Card (Glass effect) */
+
+/* =========================
+   Card (Glassmorphism)
+========================= */
 .match-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);       /* Safari support */
   border-radius: 20px;
   padding: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  transition: all 0.35s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .match-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* Image wrapper */
-.match-image-wrapper {
-  position: relative;
-  overflow: hidden;
-  border-radius: 16px;
-}
 
-/* Image */
-.match-image-wrapper img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.match-card:hover img {
-  transform: scale(1.08);
-}
-
-/* Online status dot */
-.status-dot {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-.online {
-  background: #22c55e;
-}
-
-.offline {
-  background: #9ca3af;
-}
-
-/* Info */
-.match-info {
-  margin-top: 12px;
-}
-
-.match-info h2 {
-  font-size: 19px;
-  font-weight: 600;
-  color: #111827;
-}
-
-/* Last message */
-.last-message {
-  font-size: 14px;
-  color: #6b7280;
-  margin-top: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Actions */
-.match-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-/* Buttons (shared style) */
-.match-actions button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.25s ease;
-}
-
-/* Chat button */
-.chat-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-}
-
-.chat-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(59,130,246,0.4);
-}
-
-/* Gift button */
-.gift-btn {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: white;
-}
-
-.gift-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(34,197,94,0.4);
-}
-
-/* Subtle shine effect */
+/* =========================
+   Shine Effect
+========================= */
 .match-card::before {
   content: "";
   position: absolute;
@@ -157,39 +86,308 @@
   background: linear-gradient(
     120deg,
     transparent,
-    rgba(255,255,255,0.4),
+    rgba(255, 255, 255, 0.4),
     transparent
   );
-  transition: 0.6s;
+  transition: left 0.6s ease;
+  pointer-events: none;        /* prevents shine from blocking clicks */
+  z-index: 1;
 }
 
 .match-card:hover::before {
   left: 120%;
 }
 
-/* Unread badge */
+
+/* =========================
+   Image Wrapper
+========================= */
+.match-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.match-image-wrapper img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;              /* removes inline gap under image */
+  transition: transform 0.4s ease;
+}
+
+.match-card:hover .match-image-wrapper img {
+  transform: scale(1.08);
+}
+
+
+/* =========================
+   Status Dot
+========================= */
+.status-dot {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.online  { background: #22c55e; }
+.offline { background: #9ca3af; }
+
+
+/* =========================
+   Unread Badge
+========================= */
 .unread-badge {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: red;
+  background: #ef4444;
   color: white;
-  font-size: 12px;
-  padding: 4px 7px;
-  border-radius: 50%;
-  font-weight: bold;
+  font-size: 11px;
+  min-width: 20px;             /* stays circular for 1 or 2 digit numbers */
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 50px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
 }
 
-/* Better last message */
+
+/* =========================
+   Match Info
+========================= */
+.match-info {
+  margin-top: 12px;
+}
+
+.match-info h2 {
+  font-size: 19px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+
+/* =========================
+   Last Message
+========================= */
 .last-message {
   font-size: 14px;
-  color: #666;
+  color: #6b7280;
   margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
 }
 
-/* Improve actions spacing */
+
+/* =========================
+   Actions
+========================= */
 .match-actions {
   display: flex;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: 14px;
+}
+
+.match-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.match-actions button:active {
+  transform: scale(0.95);
+}
+
+
+/* =========================
+   Chat Button
+========================= */
+.chat-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.chat-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+
+/* =========================
+   Gift Button
+========================= */
+.gift-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.gift-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+}
+
+
+/* =========================
+   Media Queries
+========================= */
+
+/* Desktops 1281px+ */
+@media (min-width: 1281px) {
+  .matches-container {
+    padding: 40px 80px;
+  }
+
+  .matches-title {
+    font-size: 32px;
+  }
+
+  .matches-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+  }
+
+  .match-image-wrapper img {
+    height: 240px;
+  }
+}
+
+
+/* Laptops 1025px–1280px */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .matches-container {
+    padding: 30px 50px;
+  }
+
+  .matches-grid {
+    gap: 24px;
+  }
+}
+
+
+/* Tablets portrait 768px–1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .matches-container {
+    padding: 20px 28px;
+  }
+
+  .matches-grid {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+  }
+
+  .match-image-wrapper img {
+    height: 190px;
+  }
+
+  .matches-title {
+    font-size: 24px;
+  }
+}
+
+
+/* Tablets landscape */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .matches-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .match-image-wrapper img {
+    height: 175px;
+  }
+}
+
+
+/* Mobile landscape 481px–767px */
+@media (min-width: 481px) and (max-width: 767px) {
+  .matches-container {
+    padding: 16px 20px;
+  }
+
+  .matches-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .matches-title {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .match-image-wrapper img {
+    height: 170px;
+  }
+
+  .match-info h2 {
+    font-size: 16px;
+  }
+
+  .match-actions button {
+    padding: 9px 8px;
+    font-size: 13px;
+  }
+}
+
+
+/* Mobile portrait 320px–480px */
+@media (min-width: 320px) and (max-width: 480px) {
+  .matches-container {
+    padding: 14px 16px;
+  }
+
+  .matches-grid {
+    grid-template-columns: 1fr;   /* single column */
+    gap: 14px;
+  }
+
+  .matches-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .match-card {
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .match-image-wrapper img {
+    height: 210px;               /* taller image on single column */
+  }
+
+  .match-info h2 {
+    font-size: 16px;
+  }
+
+  .last-message {
+    font-size: 13px;
+  }
+
+  .match-actions {
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .match-actions button {
+    padding: 10px 8px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
 }
