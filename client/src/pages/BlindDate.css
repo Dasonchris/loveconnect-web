@@ -1,0 +1,392 @@
+/* =========================
+   Font Import
+========================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+
+/* =========================
+   Container
+========================= */
+.blind-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   Header
+========================= */
+.blind-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.blind-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.blind-header-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.blind-lock-emoji {
+  font-size: 24px;
+}
+
+
+/* =========================
+   Card
+========================= */
+.blind-card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  padding: 36px 28px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Green glow when match is found */
+.match-glow {
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 0 50px rgba(34, 197, 94, 0.12);
+}
+
+
+/* =========================
+   Image Wrapper
+========================= */
+.blind-img-wrapper {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.blind-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Blur the mystery match photo */
+.blind-img.blurred {
+  filter: blur(9px) brightness(0.65);
+  transform: scale(1.1);         /* hides blur edges */
+}
+
+/* Badge overlaid on image */
+.blind-img-badge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.85);
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.match-badge-emoji {
+  font-size: 42px;
+}
+
+
+/* =========================
+   Typography
+========================= */
+.blind-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.blind-sub {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.blind-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+
+/* =========================
+   Match Found Badge
+========================= */
+.match-found-badge {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 18px;
+  border-radius: 50px;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.45);
+}
+
+
+/* =========================
+   Match Stats
+========================= */
+.match-stats {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  min-width: 100px;
+  text-align: left;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Compatibility bar */
+.stat-bar-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 50px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #86efac);
+  border-radius: 50px;
+  transition: width 1.2s ease;
+}
+
+
+/* =========================
+   Progress Bar (searching)
+========================= */
+.blind-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.blind-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d6d, #ff9eb5);
+  border-radius: 50px;
+  transition: width 0.1s linear;
+}
+
+.blind-progress-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  margin: 0;
+}
+
+
+/* =========================
+   Buttons
+========================= */
+.blind-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.blind-btn:active {
+  transform: scale(0.96);
+}
+
+.blind-btn.primary {
+  background: linear-gradient(135deg, #ff4d6d, #c9184a);
+  color: white;
+  box-shadow: 0 8px 24px rgba(255, 77, 109, 0.4);
+}
+
+.blind-btn.primary:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.blind-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.blind-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.17);
+}
+
+
+/* =========================
+   Dots Loader
+========================= */
+.dots-loader {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.dots-loader span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  animation: dotBounce 1.2s infinite ease-in-out;
+}
+
+.dots-loader span:nth-child(2) { animation-delay: 0.2s; }
+.dots-loader span:nth-child(3) { animation-delay: 0.4s; }
+
+
+/* =========================
+   Animations
+========================= */
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1;   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(255, 77, 109, 0.4); }
+  50%       { box-shadow: 0 8px 36px rgba(255, 77, 109, 0.75); }
+}
+
+.pulse {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+
+/* =========================
+   Media Queries
+========================= */
+
+/* Desktops 1281px+ */
+@media (min-width: 1281px) {
+  .blind-card        { max-width: 460px; padding: 44px 36px; }
+  .blind-header h1   { font-size: 30px; }
+  .blind-img-wrapper { width: 180px; height: 180px; }
+  .blind-card h2     { font-size: 24px; }
+}
+
+/* Laptops 1025px–1280px */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .blind-card { max-width: 440px; padding: 38px 32px; }
+}
+
+/* Tablets portrait 768px–1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .blind-card        { max-width: 400px; padding: 30px 24px; }
+  .blind-img-wrapper { width: 150px; height: 150px; }
+}
+
+/* Tablets landscape */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .blind-container   { padding: 16px; justify-content: flex-start; padding-top: 40px; }
+  .blind-img-wrapper { width: 130px; height: 130px; }
+  .blind-header      { margin-bottom: 20px; }
+  .blind-card        { padding: 24px 22px; gap: 12px; }
+}
+
+/* Mobile landscape 481px–767px */
+@media (min-width: 481px) and (max-width: 767px) {
+  .blind-card        { padding: 26px 20px; gap: 12px; }
+  .blind-img-wrapper { width: 140px; height: 140px; }
+  .blind-header h1   { font-size: 22px; }
+  .blind-card h2     { font-size: 19px; }
+}
+
+/* Mobile portrait 320px–480px */
+@media (min-width: 320px) and (max-width: 480px) {
+  .blind-container   { padding: 16px 14px; }
+  .blind-header h1   { font-size: 19px; }
+  .blind-header-icon { width: 28px; height: 28px; }
+
+  .blind-card {
+    padding: 24px 16px;
+    border-radius: 22px;
+    gap: 12px;
+  }
+
+  .blind-img-wrapper { width: 130px; height: 130px; }
+  .blind-img-badge   { font-size: 42px; }
+  .blind-card h2     { font-size: 18px; }
+  .blind-sub         { font-size: 13px; }
+  .blind-btn         { font-size: 14px; padding: 12px; }
+  .stat-label        { min-width: 80px; font-size: 11px; }
+  .stat-value        { font-size: 12px; }
+}

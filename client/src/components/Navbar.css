@@ -1,0 +1,247 @@
+/* =========================
+   Google Font Import
+========================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap');
+
+
+/* =========================
+   Navbar Container
+========================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 12px 30px; */
+  background: rgba(255, 255, 255, 0.737);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s ease;
+}
+
+
+/* =========================
+   Logo
+========================= */
+.logo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ff4d6d;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+
+/* =========================
+   Nav Links
+========================= */
+a.links {
+  text-decoration: none;
+  color: black;
+  font-family: 'Poppins', sans-serif; /* unified font */
+  border-radius: 10px;
+  padding: 10px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a.links:hover {
+  background-color: #ff4d6d;
+  color: rgba(245, 245, 245, 0.925);
+}
+
+
+/* =========================
+   Nav Links Wrapper
+   (assumes you have a wrapper
+   like <div class="nav-links">)
+========================= */
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+
+/* =========================
+   Hamburger (hidden on desktop)
+========================= */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #ff4d6d;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+
+/* ==========================================
+   MEDIA QUERIES
+========================================== */
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px and higher
+*/
+@media (min-width: 1281px) {
+  .navbar {
+    padding: 14px 60px;
+  }
+
+  .logo {
+    font-size: 2.2rem;
+  }
+
+  a.links {
+    font-size: 1rem;
+    padding: 10px 14px;
+  }
+}
+
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = 1025px to 1280px
+*/
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .navbar {
+    padding: 12px 40px;
+  }
+
+  .logo {
+    font-size: 1.9rem;
+  }
+
+  a.links {
+    font-size: 0.95rem;
+    padding: 9px 12px;
+  }
+}
+
+
+/* 
+  ##Device = Tablets, iPads (portrait)
+  ##Screen = 768px to 1024px
+*/
+@media (min-width: 768px) and (max-width: 1024px) {
+  .navbar {
+    padding: 12px 24px;
+  }
+
+  .logo {
+    font-size: 1.7rem;
+  }
+
+  a.links {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+}
+
+
+/* 
+  ##Device = Tablets, iPads (landscape)
+  ##Screen = 768px to 1024px landscape
+*/
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .navbar {
+    padding: 10px 30px;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  a.links {
+    font-size: 0.88rem;
+    padding: 7px 10px;
+  }
+}
+
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = 481px to 767px
+*/
+@media (min-width: 481px) and (max-width: 767px) {
+  .navbar {
+    padding: 10px 20px;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 0;
+    gap: 4px;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  a.links {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    width: 100%;
+    border-radius: 8px;
+  }
+}
+
+
+/* 
+  ##Device = Smartphones (Portrait)
+  ##Screen = 320px to 480px
+*/
+@media (min-width: 320px) and (max-width: 480px) {
+  .navbar {
+    padding: 10px 16px;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    font-size: 1.3rem;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 8px 0;
+    gap: 4px;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  a.links {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+    width: 100%;
+    border-radius: 8px;
+  }
+}
