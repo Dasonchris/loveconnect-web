@@ -8,22 +8,139 @@
    Container
 ========================= */
 .matches-container {
-  padding: 24px;
+  padding: 20px 24px;
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #f9fafb, #eef2ff);
+  background: linear-gradient(160deg, #f0f4ff 0%, #fce4ec 100%);
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
 }
 
 
 /* =========================
-   Title
+   Loading
 ========================= */
+.matches-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-top: 100px;
+  color: #999;
+  font-size: 14px;
+}
+
+.matches-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #ff4d6d;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* =========================
+   Header
+========================= */
+.matches-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
 .matches-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 24px;
   color: #111827;
+  margin: 0;
+}
+
+.matches-count {
+  background: #ff4d6d;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 50px;
+  min-width: 24px;
+  text-align: center;
+}
+
+
+/* =========================
+   Search
+========================= */
+.matches-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 13px;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.matches-search {
+  width: 100%;
+  padding: 10px 36px 10px 36px;
+  border: 1.5px solid #f0d6e8;
+  border-radius: 50px;
+  outline: none;
+  font-size: 13px;
+  font-family: 'Poppins', sans-serif;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.matches-search:focus {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+}
+
+.search-clear {
+  position: absolute;
+  right: 13px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: #aaa;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.2s ease;
+}
+
+.search-clear:hover { color: #ff4d6d; }
+
+
+/* =========================
+   Error
+========================= */
+.matches-error {
+  background: #fff0f3;
+  border: 1px solid #ffb3c1;
+  color: #c9184a;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.error-text {
+  color: #c9184a;
+  font-size: 13px;
+  text-align: center;
 }
 
 
@@ -31,135 +148,183 @@
    Empty State
 ========================= */
 .empty-state {
-  text-align: center;
-  margin-top: 60px;
-  color: #6b7280;
-  font-size: 16px;
-  grid-column: 1 / -1;        /* spans full grid if inside grid */
-}
-
-
-/* =========================
-   Grid
-========================= */
-.matches-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-}
-
-
-/* =========================
-   Card (Glassmorphism)
-========================= */
-.match-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);       /* Safari support */
-  border-radius: 20px;
-  padding: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 60px;
+  text-align: center;
+  color: #999;
+}
+
+.empty-icon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.empty-state p {
+  font-size: 17px;
+  font-weight: 600;
+  color: #555;
+  margin: 0;
+}
+
+.empty-state span {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.empty-action-btn {
+  margin-top: 8px;
+  padding: 10px 26px;
+  background: linear-gradient(135deg, #ff4d6d, #c9184a);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 77, 109, 0.3);
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.empty-action-btn:hover  { opacity: 0.9; transform: scale(1.02); }
+.empty-action-btn:active { transform: scale(0.97); }
+
+/* No search result */
+.no-search-result {
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+  margin-top: 20px;
+  padding: 16px;
+}
+
+.no-search-result b { color: #ff4d6d; }
+
+
+/* =========================
+   Matches Grid
+========================= */
+.matches-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* =========================
+   Match Card
+========================= */
+.match-card {
+  background: white;
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(255, 77, 109, 0.06);
 }
 
 .match-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 77, 109, 0.12);
+  border-color: rgba(255, 77, 109, 0.15);
 }
+
+.match-card:active { transform: scale(0.99); }
 
 
 /* =========================
-   Shine Effect
+   Self Notes Card
 ========================= */
-.match-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  transition: left 0.6s ease;
-  pointer-events: none;        /* prevents shine from blocking clicks */
-  z-index: 1;
+.self-card {
+  background: linear-gradient(135deg, #fff0f8, #f0f4ff);
+  border: 1.5px dashed #ffb3c1;
+  margin-bottom: 6px;
 }
 
-.match-card:hover::before {
-  left: 120%;
+.self-card:hover {
+  box-shadow: 0 8px 24px rgba(255, 77, 109, 0.15);
+  border-color: #ff4d6d;
 }
 
-
-/* =========================
-   Image Wrapper
-========================= */
-.match-image-wrapper {
-  position: relative;
-  overflow: hidden;
-  border-radius: 16px;
-}
-
-.match-image-wrapper img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;              /* removes inline gap under image */
-  transition: transform 0.4s ease;
-}
-
-.match-card:hover .match-image-wrapper img {
-  transform: scale(1.08);
-}
-
-
-/* =========================
-   Status Dot
-========================= */
-.status-dot {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 14px;
-  height: 14px;
+/* Self avatar circle */
+.self-avatar {
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-}
-
-.online  { background: #22c55e; }
-.offline { background: #9ca3af; }
-
-
-/* =========================
-   Unread Badge
-========================= */
-.unread-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ef4444;
+  background: linear-gradient(135deg, #ff4d6d, #c9184a);
   color: white;
-  font-size: 11px;
-  min-width: 20px;             /* stays circular for 1 or 2 digit numbers */
-  height: 20px;
-  padding: 0 5px;
-  border-radius: 50px;
+  font-size: 22px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
-  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(255, 77, 109, 0.3);
+}
+
+.self-btn {
+  background: linear-gradient(135deg, #ff4d6d, #c9184a) !important;
+  color: white !important;
+}
+
+
+/* =========================
+   Match Image Wrapper
+========================= */
+.match-image-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.match-image-wrapper img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 2px solid #f0d6e8;
+}
+
+/* Online / offline dot */
+.status-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.online  { background: #22c55e; }
+.offline { background: #d1d5db; }
+
+/* Unread badge */
+.unread-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ff4d6d;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(255, 77, 109, 0.4);
 }
 
 
@@ -167,54 +332,74 @@
    Match Info
 ========================= */
 .match-info {
-  margin-top: 12px;
+  flex: 1;
+  min-width: 0;               /* prevents text overflow */
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.match-info-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
 }
 
 .match-info h2 {
-  font-size: 19px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0 0 4px;
-}
-
-
-/* =========================
-   Last Message
-========================= */
-.last-message {
   font-size: 14px;
-  color: #6b7280;
-  margin-top: 4px;
+  font-weight: 600;
+  color: #111;
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.4;
 }
 
-
-/* =========================
-   Actions
-========================= */
-.match-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 14px;
+.match-age {
+  font-size: 12px;
+  font-weight: 400;
+  color: #aaa;
 }
 
-.match-actions button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
+.match-time {
+  font-size: 11px;
+  color: #bbb;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.last-message {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bold last message if unread */
+.last-message.unread {
+  color: #333;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.match-actions button:active {
-  transform: scale(0.95);
+/* Hobby mini tags */
+.match-hobbies {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.match-hobby-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 7px;
+  border-radius: 50px;
+  background: #fff0f3;
+  color: #ff4d6d;
+  border: 1px solid #ffd6e0;
 }
 
 
@@ -222,27 +407,34 @@
    Chat Button
 ========================= */
 .chat-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
+  flex-shrink: 0;
+  padding: 7px 14px;
+  background: #fff0f3;
+  color: #ff4d6d;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
 }
 
 .chat-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-}
-
-
-/* =========================
-   Gift Button
-========================= */
-.gift-btn {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: #ff4d6d;
   color: white;
+  border-color: #ff4d6d;
 }
 
-.gift-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+.chat-btn:active { transform: scale(0.95); }
+
+/* Active when unread */
+.chat-btn-active {
+  background: #ff4d6d;
+  color: white;
+  border-color: #ff4d6d;
+  box-shadow: 0 3px 10px rgba(255, 77, 109, 0.3);
 }
 
 
@@ -253,141 +445,57 @@
 /* Desktops 1281px+ */
 @media (min-width: 1281px) {
   .matches-container {
-    padding: 40px 80px;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 30px 40px;
   }
-
-  .matches-title {
-    font-size: 32px;
-  }
-
-  .matches-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 30px;
-  }
-
-  .match-image-wrapper img {
-    height: 240px;
-  }
+  .matches-title { font-size: 26px; }
 }
-
 
 /* Laptops 1025px–1280px */
 @media (min-width: 1025px) and (max-width: 1280px) {
   .matches-container {
-    padding: 30px 50px;
-  }
-
-  .matches-grid {
-    gap: 24px;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 26px 36px;
   }
 }
-
 
 /* Tablets portrait 768px–1024px */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .matches-container {
-    padding: 20px 28px;
-  }
-
-  .matches-grid {
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 20px;
-  }
-
-  .match-image-wrapper img {
-    height: 190px;
-  }
-
-  .matches-title {
-    font-size: 24px;
-  }
+  .matches-container { padding: 20px 28px; }
+  .match-image-wrapper img { width: 48px; height: 48px; }
+  .self-avatar             { width: 48px; height: 48px; }
 }
-
 
 /* Tablets landscape */
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  .matches-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .match-image-wrapper img {
-    height: 175px;
-  }
+  .matches-container { padding: 16px 32px; }
 }
-
 
 /* Mobile landscape 481px–767px */
 @media (min-width: 481px) and (max-width: 767px) {
-  .matches-container {
-    padding: 16px 20px;
-  }
-
-  .matches-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .matches-title {
-    font-size: 22px;
-    margin-bottom: 18px;
-  }
-
-  .match-image-wrapper img {
-    height: 170px;
-  }
-
-  .match-info h2 {
-    font-size: 16px;
-  }
-
-  .match-actions button {
-    padding: 9px 8px;
-    font-size: 13px;
-  }
+  .matches-container       { padding: 16px 18px; }
+  .matches-title           { font-size: 20px; }
+  .match-image-wrapper img { width: 46px; height: 46px; }
+  .self-avatar             { width: 46px; height: 46px; font-size: 20px; }
+  .match-info h2           { font-size: 13px; }
+  .last-message            { font-size: 11px; }
+  .chat-btn                { padding: 6px 12px; font-size: 11px; }
 }
-
 
 /* Mobile portrait 320px–480px */
 @media (min-width: 320px) and (max-width: 480px) {
-  .matches-container {
-    padding: 14px 16px;
-  }
-
-  .matches-grid {
-    grid-template-columns: 1fr;   /* single column */
-    gap: 14px;
-  }
-
-  .matches-title {
-    font-size: 20px;
-    margin-bottom: 16px;
-  }
-
-  .match-card {
-    border-radius: 16px;
-    padding: 14px;
-  }
-
-  .match-image-wrapper img {
-    height: 210px;               /* taller image on single column */
-  }
-
-  .match-info h2 {
-    font-size: 16px;
-  }
-
-  .last-message {
-    font-size: 13px;
-  }
-
-  .match-actions {
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .match-actions button {
-    padding: 10px 8px;
-    font-size: 13px;
-    border-radius: 10px;
-  }
+  .matches-container       { padding: 14px 14px; }
+  .matches-title           { font-size: 19px; }
+  .match-card              { padding: 10px 12px; gap: 10px; border-radius: 14px; }
+  .match-image-wrapper img { width: 44px; height: 44px; }
+  .self-avatar             { width: 44px; height: 44px; font-size: 18px; }
+  .match-info h2           { font-size: 13px; }
+  .last-message            { font-size: 11px; }
+  .match-hobby-tag         { font-size: 9px; padding: 1px 6px; }
+  .chat-btn                { padding: 6px 11px; font-size: 11px; }
+  .matches-search          { font-size: 12px; padding: 9px 34px; }
+  .empty-state p           { font-size: 15px; }
+  .empty-icon              { font-size: 40px; }
 }

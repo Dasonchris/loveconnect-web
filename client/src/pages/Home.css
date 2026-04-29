@@ -8,10 +8,11 @@
    Page Layout
 ========================= */
 .container {
-  padding: 20px;
+  padding: 24px 32px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 240px));
+  justify-content: center;
+  gap: 18px;
   background: #f5f7fb;
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
@@ -20,101 +21,224 @@
 
 
 /* =========================
+   Loading Screen
+========================= */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #888;
+  font-size: 15px;
+}
+
+.loading-spinner {
+  width: 38px;
+  height: 38px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff4d6d;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* =========================
+   No Users State
+========================= */
+.no-users {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 60px;
+  color: #777;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.no-users button {
+  padding: 9px 26px;
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.no-users button:hover { background: #e63b5c; }
+
+
+/* =========================
    Card
 ========================= */
 .card {
   background: #ffffff;
-  border-radius: 20px;
-  padding: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  width: 100%;
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.13);
+}
+
+@keyframes heartPop {
+  0%   { transform: scale(1);    }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1);    }
+}
+
+.card-liked {
+  animation: heartPop 0.35s ease forwards;
 }
 
 
 /* =========================
    Card Image
 ========================= */
-.card img {
+.card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-img-wrapper img {
   width: 100%;
-  height: 180px;
+  height: 165px;
   object-fit: cover;
-  border-radius: 15px;
-  margin-bottom: 10px;
+  display: block;
+  transition: transform 0.4s ease;
 }
 
+.card:hover .card-img-wrapper img {
+  transform: scale(1.05);
+}
 
-/* =========================
-   Card Text
-========================= */
-.card h2 {
-  font-size: 18px;
+.card-img-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 12px 8px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.card-name-overlay {
+  color: white;
+  font-size: 15px;
   font-weight: 700;
-  margin: 5px 0;
-  color: #222;
 }
 
-.card p {
-  font-size: 14px;
-  color: #777;
-  line-height: 1.5;
-  margin: 4px 0;
+.card-location {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
 }
 
 
 /* =========================
-   Action Buttons
+   Card Body
+========================= */
+.card-body {
+  padding: 10px 13px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.card-top {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.card-body h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.card-age {
+  font-size: 13px;
+  font-weight: 400;
+  color: #888;
+}
+
+.card-bio {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* =========================
+   Hobby Tags
+========================= */
+.hobby-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.hobby-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 50px;
+  color: #333;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+
+/* =========================
+   Actions
 ========================= */
 .actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
-  gap: 10px; /* prevents buttons touching on small cards */
+  gap: 8px;
+  padding: 10px 13px 13px;
 }
 
-/* Base button — scoped, not global */
 .actions button {
-  flex: 1;               /* equal width buttons */
+  flex: 1;
   border: none;
-  padding: 10px 16px;
+  padding: 9px;
   border-radius: 50px;
   font-size: 16px;
-  font-family: 'Poppins', sans-serif;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
-.actions button:active {
-  transform: scale(0.95);
-}
+.actions button:active { transform: scale(0.93); }
 
-.dislike {
-  background: #ff4d4d;
-  color: white;
-}
-
-.dislike:hover {
-  background: #e63939;
-  transform: scale(1.08);
-}
-
-.like {
-  background: #00c853;
-  color: white;
-}
-
-.like:hover {
-  background: #00a844;
-  transform: scale(1.08);
-}
+.dislike             { background: #ffe5e5; }
+.dislike:hover       { background: #ffcccc; transform: scale(1.07); }
+.like                { background: #e6f9ed; }
+.like:hover          { background: #c3f0d4; transform: scale(1.07); }
 
 
 /* =========================
@@ -122,17 +246,16 @@
 ========================= */
 .popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 16px;        /* prevents popup touching screen edges on mobile */
+  padding: 16px;
   box-sizing: border-box;
+  animation: fadeIn 0.25s ease;
+  overflow-y: auto;             /* scroll if popup taller than screen */
 }
 
 
@@ -141,82 +264,252 @@
 ========================= */
 .popup {
   background: white;
-  padding: 28px 24px;
-  border-radius: 20px;
+  padding: 26px 22px;
+  border-radius: 22px;
   width: 100%;
-  max-width: 360px;     /* responsive: shrinks on small screens */
+  max-width: 360px;
   text-align: center;
-  animation: fadeIn 0.3s ease;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.3s ease;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: auto;                 /* centers inside scrollable overlay */
+}
+
+.popup-avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.popup-avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff4d6d;
+  box-shadow: 0 4px 16px rgba(255, 77, 109, 0.28);
 }
 
 .popup h2 {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 700;
-  margin-bottom: 16px;
-  color: #222;
+  color: #111;
+  margin: 0;
+}
+
+.popup-name  { color: #ff4d6d; }
+
+.popup-sub {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.popup-hobbies { justify-content: center; }
+
+
+/* =========================
+   Register Steps
+========================= */
+.register-steps {
+  width: 100%;
+  background: #fff5f8;
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  border: 1px solid #ffd6e0;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.register-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #555;
+}
+
+.step-icon {
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 
 /* =========================
-   Popup Inputs
+   Input Groups
 ========================= */
-.popup input {
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
   width: 100%;
-  margin: 8px 0;
-  padding: 10px 14px;
-  border-radius: 10px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 13px;
   border: 1px solid #ddd;
+  border-radius: 10px;
   outline: none;
-  font-size: 14px;
+  font-size: 13px;
   font-family: 'Poppins', sans-serif;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
 }
 
-.popup input:focus {
-  border-color: #00c853;
-  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.12); /* soft glow */
+.input-group input:focus {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+}
+
+.input-group input.input-error { border-color: #ef4444; }
+
+.error-msg {
+  font-size: 11px;
+  color: #ef4444;
+  padding-left: 3px;
+}
+
+.error-msg.general {
+  text-align: center;
+  width: 100%;
 }
 
 
 /* =========================
    Popup Buttons
 ========================= */
-.popup button {
+.register-btn {
   width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #ff4d6d, #c9184a);
+  color: white;
   border: none;
-  padding: 11px 16px;
   border-radius: 50px;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 600;
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 5px 16px rgba(255, 77, 109, 0.32);
+  transition: opacity 0.2s ease, transform 0.15s ease;
 }
 
-.popup button:active {
-  transform: scale(0.97);
-}
-
-.register-btn {
-  background: #ff4d6d;
-  color: white;
-}
-
-.register-btn:hover {
-  background: #e63b5c;
+.register-btn:hover    { opacity: 0.91; transform: scale(1.02); }
+.register-btn:active   { transform: scale(0.97); }
+.register-btn:disabled {
+  background: #f9a8b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .close-btn {
-  background: #e0e0e0;
-  color: #444;
+  width: 100%;
+  padding: 10px;
+  background: #f3f4f6;
+  color: #666;
+  border: none;
+  border-radius: 50px;
+  font-size: 13px;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.close-btn:hover {
-  background: #bbb;
-  color: #222;
+.close-btn:hover { background: #e5e7eb; }
+
+
+/* =========================
+   Button Loading Spinner
+========================= */
+.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+
+/* =========================
+   Match Result Popup
+========================= */
+.match-result-popup {
+  border-top: 4px solid #ff4d6d;
+}
+
+.match-result-icon {
+  font-size: 52px;
+  line-height: 1;
+  animation: heartBeat 0.6s ease;
+}
+
+@keyframes heartBeat {
+  0%   { transform: scale(1);    }
+  30%  { transform: scale(1.25); }
+  60%  { transform: scale(0.95); }
+  100% { transform: scale(1);    }
+}
+
+.match-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ff4d6d;
+  margin: 0;
+}
+
+.match-result-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.match-result-avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff4d6d;
+  box-shadow: 0 4px 16px rgba(255, 77, 109, 0.3);
+}
+
+/* Status pill under avatar */
+.match-result-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 50px;
+}
+
+.match-result-status.pending {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.match-result-status.matched {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
 }
 
 
@@ -224,14 +517,13 @@
    Animations
 ========================= */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
 }
 
 
@@ -242,21 +534,18 @@
 /* Desktops 1281px+ */
 @media (min-width: 1281px) {
   .container {
-    padding: 40px 60px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 28px;
-  }
-
-  .card img {
-    height: 200px;
+    padding: 32px 60px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 240px));
+    gap: 20px;
   }
 }
 
 /* Laptops 1025px–1280px */
 @media (min-width: 1025px) and (max-width: 1280px) {
   .container {
-    padding: 30px 40px;
-    gap: 24px;
+    padding: 28px 40px;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 235px));
+    gap: 18px;
   }
 }
 
@@ -264,46 +553,41 @@
 @media (min-width: 768px) and (max-width: 1024px) {
   .container {
     padding: 20px 24px;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 220px));
+    gap: 16px;
   }
 
-  .card img {
-    height: 160px;
-  }
+  .card-img-wrapper img { height: 148px; }
+  .card-body h2         { font-size: 14px; }
 }
 
 /* Tablets landscape */
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
   .container {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
   }
 
-  .card img {
-    height: 150px;
-  }
+  .card-img-wrapper img { height: 138px; }
 }
 
 /* Mobile landscape 481px–767px */
 @media (min-width: 481px) and (max-width: 767px) {
   .container {
     grid-template-columns: repeat(2, 1fr);
-    padding: 16px;
-    gap: 16px;
+    padding: 14px 16px;
+    gap: 13px;
   }
 
-  .card h2 {
-    font-size: 16px;
-  }
+  .card-img-wrapper img { height: 145px; }
+  .card-body h2         { font-size: 13px; }
+  .card-bio             { font-size: 11px; }
+  .hobby-tag            { font-size: 10px; padding: 3px 7px; }
+  .actions button       { font-size: 15px; padding: 8px; }
 
-  .card img {
-    height: 150px;
-  }
-
-  .actions button {
-    font-size: 14px;
-    padding: 9px 12px;
-  }
+  .popup                { padding: 20px 18px; }
+  .register-steps       { padding: 8px 12px; }
+  .register-step        { font-size: 11px; }
 }
 
 /* Mobile portrait 320px–480px */
@@ -311,42 +595,30 @@
   .container {
     grid-template-columns: 1fr;
     padding: 14px;
-    gap: 14px;
+    gap: 13px;
   }
 
-  .card {
-    margin-top: 1rem;
-    border-radius: 16px;
-    padding: 12px;
-  }
+  .card                 { border-radius: 16px; }
+  .card-img-wrapper img { height: 190px; }
+  .card-body            { padding: 10px 12px 5px; }
+  .card-body h2         { font-size: 14px; }
+  .card-bio             { font-size: 11px; }
+  .hobby-tag            { font-size: 10px; }
+  .actions              { padding: 9px 12px 12px; }
+  .actions button       { font-size: 15px; padding: 8px; }
 
-  .card img {
-    height: 200px;                /* taller image on single column */
-  }
+  .popup                { padding: 20px 16px; border-radius: 18px; gap: 8px; }
+  .popup h2             { font-size: 15px; }
+  .popup-avatar         { width: 64px; height: 64px; }
+  .popup-sub            { font-size: 11px; }
+  .register-steps       { padding: 8px 10px; gap: 6px; }
+  .register-step        { font-size: 11px; gap: 7px; }
+  .step-icon            { font-size: 12px; }
+  .register-btn         { font-size: 13px; padding: 10px; }
+  .close-btn            { font-size: 12px; padding: 9px; }
 
-  .card h2 {
-    font-size: 16px;
-  }
-
-  .actions button {
-    font-size: 14px;
-    padding: 9px 10px;
-  }
-
-  .popup {
-    padding: 20px 16px;
-    border-radius: 16px;
-  }
-
-  .popup h2 {
-    font-size: 17px;
-  }
-
-  .popup input {
-    font-size: 13px;
-  }
-
-  .popup button {
-    font-size: 14px;
-  }
+  .match-result-icon    { font-size: 42px; }
+  .match-title          { font-size: 19px; }
+  .match-result-avatar img { width: 68px; height: 68px; }
+  .match-result-status  { font-size: 10px; padding: 3px 10px; }
 }

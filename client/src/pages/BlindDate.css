@@ -14,7 +14,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 20px 16px;
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
 }
@@ -27,101 +27,93 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .blind-header h1 {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 700;
-  color: #ffffff;
+  color: #fff;
   margin: 0;
 }
 
-.blind-header-icon {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-}
-
-.blind-lock-emoji {
-  font-size: 24px;
+.premium-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 50px;
 }
 
 
 /* =========================
-   Card
+   Card  ← compact size
 ========================= */
 .blind-card {
   background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 28px;
-  padding: 36px 28px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 24px 22px;
   width: 100%;
-  max-width: 420px;
+  max-width: 340px;          /* ← smaller than before */
   text-align: center;
   color: white;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   box-sizing: border-box;
 }
 
-/* Green glow when match is found */
 .match-glow {
-  border-color: rgba(34, 197, 94, 0.3);
+  border-color: rgba(34, 197, 94, 0.25);
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.45),
-    0 0 50px rgba(34, 197, 94, 0.12);
+    0 16px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(34, 197, 94, 0.1);
 }
 
 
 /* =========================
-   Image Wrapper
+   Icon / Avatar
 ========================= */
-.blind-img-wrapper {
+.blind-icon {
+  font-size: 44px;
+  line-height: 1;
+}
+
+.blind-icon.searching {
+  animation: pulse-icon 1s infinite ease-in-out;
+}
+
+@keyframes pulse-icon {
+  0%, 100% { transform: scale(1);    opacity: 1;   }
+  50%       { transform: scale(1.12); opacity: 0.7; }
+}
+
+.blind-avatar {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  flex-shrink: 0;
-}
-
-.blind-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Blur the mystery match photo */
-.blind-img.blurred {
-  filter: blur(9px) brightness(0.65);
-  transform: scale(1.1);         /* hides blur edges */
-}
-
-/* Badge overlaid on image */
-.blind-img-badge {
-  position: absolute;
-  inset: 0;
+  background: rgba(255,255,255,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 52px;
-  font-weight: 800;
-  color: rgba(255,255,255,0.85);
-  background: rgba(0, 0, 0, 0.2);
-  pointer-events: none;
+  font-size: 36px;
+  border: 2px solid rgba(255,255,255,0.2);
+  overflow: hidden;
 }
 
-.match-badge-emoji {
-  font-size: 42px;
+.blind-avatar-blur {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: rgba(15, 52, 96, 0.4);
+  border-radius: 50%;
 }
 
 
@@ -129,24 +121,41 @@
    Typography
 ========================= */
 .blind-card h2 {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: #fff;
   margin: 0;
 }
 
 .blind-sub {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.58);
   margin: 0;
-  line-height: 1.6;
-  max-width: 300px;
+  line-height: 1.5;
+  max-width: 260px;
 }
 
 .blind-hint {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
   margin: 0;
+}
+
+
+/* =========================
+   Free Info Strip
+========================= */
+.free-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 10px 14px;
+  width: 100%;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  text-align: left;
 }
 
 
@@ -156,57 +165,56 @@
 .match-found-badge {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 6px 18px;
+  padding: 4px 14px;
   border-radius: 50px;
-  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.45);
+  box-shadow: 0 3px 12px rgba(34,197,94,0.4);
 }
 
 
 /* =========================
-   Match Stats
+   Stats
 ========================= */
 .match-stats {
   width: 100%;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 16px;
-  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   box-sizing: border-box;
 }
 
 .stat-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .stat-label {
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-  min-width: 100px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  min-width: 48px;
   text-align: left;
 }
 
 .stat-value {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
 }
 
-/* Compatibility bar */
 .stat-bar-track {
   flex: 1;
-  height: 8px;
-  background: rgba(255,255,255,0.12);
+  height: 6px;
+  background: rgba(255,255,255,0.1);
   border-radius: 50px;
   overflow: hidden;
-  min-width: 60px;
+  min-width: 50px;
 }
 
 .stat-bar-fill {
@@ -218,12 +226,40 @@
 
 
 /* =========================
-   Progress Bar (searching)
+   Limit Info
+========================= */
+.limit-info {
+  width: 100%;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.limit-free {
+  background: rgba(255, 77, 109, 0.12);
+  color: rgba(255, 200, 210, 0.9);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 0;
+}
+
+.limit-premium {
+  background: rgba(34, 197, 94, 0.12);
+  color: rgba(134, 239, 172, 0.9);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 0;
+}
+
+
+/* =========================
+   Progress Bar
 ========================= */
 .blind-progress-track {
   width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.12);
+  height: 7px;
+  background: rgba(255,255,255,0.1);
   border-radius: 50px;
   overflow: hidden;
 }
@@ -236,50 +272,9 @@
 }
 
 .blind-progress-label {
-  font-size: 13px;
-  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
   margin: 0;
-}
-
-
-/* =========================
-   Buttons
-========================= */
-.blind-btn {
-  width: 100%;
-  padding: 13px;
-  border: none;
-  border-radius: 50px;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.blind-btn:active {
-  transform: scale(0.96);
-}
-
-.blind-btn.primary {
-  background: linear-gradient(135deg, #ff4d6d, #c9184a);
-  color: white;
-  box-shadow: 0 8px 24px rgba(255, 77, 109, 0.4);
-}
-
-.blind-btn.primary:hover {
-  opacity: 0.9;
-  transform: scale(1.02);
-}
-
-.blind-btn.secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.blind-btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.17);
 }
 
 
@@ -288,105 +283,291 @@
 ========================= */
 .dots-loader {
   display: flex;
-  gap: 8px;
+  gap: 7px;
   justify-content: center;
 }
 
 .dots-loader span {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255,255,255,0.6);
   animation: dotBounce 1.2s infinite ease-in-out;
 }
 
 .dots-loader span:nth-child(2) { animation-delay: 0.2s; }
 .dots-loader span:nth-child(3) { animation-delay: 0.4s; }
 
-
-/* =========================
-   Animations
-========================= */
 @keyframes dotBounce {
   0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
   40%           { transform: scale(1);   opacity: 1;   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0);    }
+
+/* =========================
+   Buttons
+========================= */
+.blind-btn {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.fade-in {
-  animation: fadeIn 0.4s ease forwards;
+.blind-btn:active { transform: scale(0.96); }
+
+.blind-btn.primary {
+  background: linear-gradient(135deg, #ff4d6d, #c9184a);
+  color: white;
+  box-shadow: 0 6px 18px rgba(255,77,109,0.38);
+}
+
+.blind-btn.primary:hover  { opacity: 0.9; transform: scale(1.02); }
+.blind-btn.primary:disabled {
+  background: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.blind-btn.upgrade {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  box-shadow: 0 6px 18px rgba(245,158,11,0.35);
+}
+
+.blind-btn.upgrade:hover { opacity: 0.9; transform: scale(1.02); }
+
+.blind-btn.secondary {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.blind-btn.secondary:hover  { background: rgba(255,255,255,0.14); }
+.blind-btn.secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+
+/* =========================
+   Paywall Modal
+========================= */
+.paywall-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: fadeIn 0.25s ease;
+}
+
+.paywall-box {
+  background: #1e2a4a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 22px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  animation: scaleIn 0.3s ease;
+  box-sizing: border-box;
+}
+
+.paywall-icon {
+  font-size: 38px;
+  line-height: 1;
+}
+
+.paywall-box h2 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.paywall-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.paywall-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  text-align: left;
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+}
+
+.paywall-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.price-amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.price-period {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Payment loading */
+.pay-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pay-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+/* Payment success */
+.pay-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0;
+}
+
+.pay-success-icon { font-size: 48px; }
+
+.pay-success h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #86efac;
+}
+
+.pay-success p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+
+/* =========================
+   Chat additions
+========================= */
+.upgrade-inline-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s ease;
+}
+
+.upgrade-inline-btn:hover { opacity: 0.9; }
+
+.phone-warning {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  text-align: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.chat-premium-badge {
+  margin-left: auto;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+
+.chat-paywall {
+  background: #1e2a4a;
+}
+
+
+/* =========================
+   Animations
+========================= */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 8px 24px rgba(255, 77, 109, 0.4); }
-  50%       { box-shadow: 0 8px 36px rgba(255, 77, 109, 0.75); }
+  0%, 100% { box-shadow: 0 6px 18px rgba(255,77,109,0.38); }
+  50%       { box-shadow: 0 6px 28px rgba(255,77,109,0.7);  }
 }
 
-.pulse {
-  animation: pulse 2s infinite ease-in-out;
+.pulse { animation: pulse 2s infinite ease-in-out; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 
 /* =========================
    Media Queries
 ========================= */
-
-/* Desktops 1281px+ */
 @media (min-width: 1281px) {
-  .blind-card        { max-width: 460px; padding: 44px 36px; }
-  .blind-header h1   { font-size: 30px; }
-  .blind-img-wrapper { width: 180px; height: 180px; }
-  .blind-card h2     { font-size: 24px; }
+  .blind-card  { max-width: 360px; padding: 28px 26px; }
+  .paywall-box { max-width: 360px; }
 }
 
-/* Laptops 1025px–1280px */
-@media (min-width: 1025px) and (max-width: 1280px) {
-  .blind-card { max-width: 440px; padding: 38px 32px; }
-}
-
-/* Tablets portrait 768px–1024px */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .blind-card        { max-width: 400px; padding: 30px 24px; }
-  .blind-img-wrapper { width: 150px; height: 150px; }
+  .blind-card  { max-width: 320px; }
+  .paywall-box { max-width: 320px; }
 }
 
-/* Tablets landscape */
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  .blind-container   { padding: 16px; justify-content: flex-start; padding-top: 40px; }
-  .blind-img-wrapper { width: 130px; height: 130px; }
-  .blind-header      { margin-bottom: 20px; }
-  .blind-card        { padding: 24px 22px; gap: 12px; }
-}
-
-/* Mobile landscape 481px–767px */
-@media (min-width: 481px) and (max-width: 767px) {
-  .blind-card        { padding: 26px 20px; gap: 12px; }
-  .blind-img-wrapper { width: 140px; height: 140px; }
-  .blind-header h1   { font-size: 22px; }
-  .blind-card h2     { font-size: 19px; }
-}
-
-/* Mobile portrait 320px–480px */
-@media (min-width: 320px) and (max-width: 480px) {
-  .blind-container   { padding: 16px 14px; }
-  .blind-header h1   { font-size: 19px; }
-  .blind-header-icon { width: 28px; height: 28px; }
-
-  .blind-card {
-    padding: 24px 16px;
-    border-radius: 22px;
-    gap: 12px;
-  }
-
-  .blind-img-wrapper { width: 130px; height: 130px; }
-  .blind-img-badge   { font-size: 42px; }
-  .blind-card h2     { font-size: 18px; }
-  .blind-sub         { font-size: 13px; }
-  .blind-btn         { font-size: 14px; padding: 12px; }
-  .stat-label        { min-width: 80px; font-size: 11px; }
-  .stat-value        { font-size: 12px; }
+@media (max-width: 480px) {
+  .blind-header h1 { font-size: 19px; }
+  .blind-card      { padding: 20px 16px; border-radius: 18px; max-width: 100%; }
+  .blind-card h2   { font-size: 16px; }
+  .blind-sub       { font-size: 12px; }
+  .blind-btn       { font-size: 13px; padding: 10px; }
+  .paywall-box     { padding: 22px 16px; }
+  .paywall-box h2  { font-size: 17px; }
+  .price-amount    { font-size: 24px; }
 }
