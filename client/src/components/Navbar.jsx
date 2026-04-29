@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { isLoggedIn, clearAuth } from "../api";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+
+  const handleLogout = () => {
+    clearAuth();
+    window.location.href = "/";
+  };
 
   return (
     <nav className="navbar">
@@ -14,9 +20,14 @@ export default function Navbar() {
       <div className={`nav-links ${open ? "open" : ""}`}>
         <Link className="links" to="/">Home</Link>
         <Link className="links" to="/matches">Matches</Link>
-        <Link className="links" to="/blind">Blind Date</Link>
+        <Link className="links" to="/blind">Blinddate</Link>
         <Link className="links" to="/marketplace">Marketplace</Link>
         <Link className="links" to="/community">Community</Link>
+        {isLoggedIn() && (
+          <button className="links logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        )}
       </div>
 
       {/* Hamburger Button */}

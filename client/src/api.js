@@ -1,6 +1,5 @@
 // client/src/api.js
-
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const BASE_URL = "";
 
 
 // ════════════════════════════════════════════════════════
@@ -107,7 +106,7 @@ export const authAPI = {
 
   // POST /api/auth/register  ← Home.jsx popup
   register: (formData) =>
-    request("/auth/register", "POST", {
+    request("/api/auth/register", "POST", {
       name:     formData.name?.trim(),
       email:    formData.email?.trim().toLowerCase(),
       password: formData.password,
@@ -115,13 +114,13 @@ export const authAPI = {
 
   // POST /api/auth/login
   login: (formData) =>
-    request("/auth/login", "POST", {
+    request("/api/auth/login", "POST", {
       email:    formData.email?.trim().toLowerCase(),
       password: formData.password,
     }),
 
   // GET /api/auth/me  ← get current logged in user
-  getMe: () => request("/auth/me"),
+  getMe: () => request("/api/auth/me"),
 
   // Helper — check if logged in
   isLoggedIn: () => isLoggedIn(),
@@ -144,31 +143,28 @@ export const authAPI = {
 export const matchAPI = {
 
   // GET /api/matches/users  ← swipeable cards on Home.jsx
-  getUsers: () => request("/matches/users"),
+  getUsers: () => request("/api/matches/users"),
 
   // GET /api/matches  ← Matches.jsx list
-  getMatches: () => request("/matches"),
+  getMatches: () => request("/api/matches"),
 
   // POST /api/matches/like/:id  ← ❤️ button
-  likeUser: (id) => request(`/matches/like/${id}`, "POST"),
+  likeUser: (id) => request(`/api/matches/like/${id}`, "POST"),
 
   // POST /api/matches/dislike/:id  ← ❌ button
-  dislikeUser: (id) => request(`/matches/dislike/${id}`, "POST"),
+  dislikeUser: (id) => request(`/api/matches/dislike/${id}`, "POST"),
 };
 
 
-// ════════════════════════════════════════════════════════
-//  CHAT  →  /api/chat/...
-// ════════════════════════════════════════════════════════
 export const chatAPI = {
 
   // GET /api/chat/:userId  ← load messages in Chat.jsx
   getMessages: (userId) =>
-    request(`/chat/${userId}`),
+    request(`/api/chat/${userId}`),
 
   // POST /api/chat/send  ← send message
   sendMessage: (receiverId, text, isBlindDate = false) =>
-    request("/chat/send", "POST", {
+    request("/api/chat/send", "POST", {
       receiverId,
       text:        text?.trim(),
       isBlindDate,
@@ -176,15 +172,15 @@ export const chatAPI = {
 
   // DELETE /api/chat/:id  ← delete message
   deleteMessage: (id) =>
-    request(`/chat/${id}`, "DELETE"),
+    request(`/api/chat/${id}`, "DELETE"),
 
   // PUT /api/chat/read/:userId  ← mark messages as read
   markAsRead: (userId) =>
-    request(`/chat/read/${userId}`, "PUT"),
+    request(`/api/chat/read/${userId}`, "PUT"),
 
-  // GET /api/chat/unread/count  ← unread badge on Matches
-  getUnreadCount: () =>
-    request("/chat/unread/count"),
+  // GET /api/chat/unread/:userId  ← unread badge on Matches
+  getUnreadCount: (userId) =>
+    request(`/api/chat/unread/${userId}`),
 };
 
 
@@ -194,18 +190,18 @@ export const chatAPI = {
 export const notesAPI = {
 
   // GET /api/chat/notes  ← SelfChat.jsx load
-  getNotes: () => request("/chat/notes"),
+  getNotes: () => request("/api/chat/notes"),
 
   // POST /api/chat/notes  ← SelfChat.jsx send
   addNote: (text, time) =>
-    request("/chat/notes", "POST", {
+    request("/api/chat/notes", "POST", {
       text: text?.trim(),
       time,
     }),
 
   // DELETE /api/chat/notes/:id  ← SelfChat.jsx delete
   deleteNote: (id) =>
-    request(`/chat/notes/${id}`, "DELETE"),
+    request(`/api/chat/notes/${id}`, "DELETE"),
 };
 
 
@@ -216,25 +212,25 @@ export const communityAPI = {
 
   // GET /api/community?page=1  ← Community.jsx feed
   getPosts: (page = 1) =>
-    request(`/community?page=${page}`),
+    request(`/api/community?page=${page}`),
 
   // POST /api/community  ← create post
   createPost: (text) =>
-    request("/community", "POST", { text: text?.trim() }),
+    request("/api/community", "POST", { text: text?.trim() }),
 
   // PUT /api/community/like/:id  ← toggle like
   likePost: (id) =>
-    request(`/community/like/${id}`, "PUT"),
+    request(`/api/community/like/${id}`, "PUT"),
 
   // POST /api/community/comment/:id  ← add comment
   addComment: (id, text) =>
-    request(`/community/comment/${id}`, "POST", {
+    request(`/api/community/comment/${id}`, "POST", {
       text: text?.trim(),
     }),
 
   // DELETE /api/community/:id  ← delete own post
   deletePost: (id) =>
-    request(`/community/${id}`, "DELETE"),
+    request(`/api/community/${id}`, "DELETE"),
 };
 
 
@@ -246,19 +242,19 @@ export const marketplaceAPI = {
   // GET /api/marketplace?search=...  ← product grid
   getProducts: (search = "") =>
     request(
-      `/marketplace${search ? `?search=${encodeURIComponent(search)}` : ""}`
+      `/api/marketplace${search ? `?search=${encodeURIComponent(search)}` : ""}`
     ),
 
   // POST /api/marketplace/purchase/:id  ← buy product
   purchaseProduct: (id, name, message = "") =>
-    request(`/marketplace/purchase/${id}`, "POST", {
+    request(`/api/marketplace/purchase/${id}`, "POST", {
       name:    name?.trim(),
       message: message?.trim(),
     }),
 
   // POST /api/marketplace  ← seller adds product
   addProduct: (data) =>
-    request("/marketplace", "POST", {
+    request("/api/marketplace", "POST", {
       name:        data.name?.trim(),
       price:       Number(data.price),
       description: data.description?.trim() || "",
@@ -274,17 +270,22 @@ export const marketplaceAPI = {
 export const blindAPI = {
 
   // GET /api/blind/match  ← BlindDate.jsx find match
-  findMatch: () => request("/blind/match"),
+  findMatch: () => request("/api/blind/match"),
 
   // POST /api/blind/upgrade  ← upgrade to premium
-  upgradeToPremium: () =>
-    request("/blind/upgrade", "POST").then(data => {
+  upgradeToPremium: ({ method, provider, account, accountName } = {}) =>
+    request("/api/blind/upgrade", "POST", {
+      method,
+      provider,
+      account,
+      accountName,
+    }).then(data => {
       localStorage.setItem("isPremium", "true");
       return data;
     }),
 
   // GET /api/blind/status  ← check if user is premium
-  getPremiumStatus: () => request("/blind/status"),
+  getPremiumStatus: () => request("/api/blind/status"),
 };
 
 
@@ -295,14 +296,14 @@ export const premiumAPI = {
 
   // POST /api/premium/pay  ← start payment (Paystack/Stripe)
   pay: (amount = 9.99, currency = "USD") =>
-    request("/premium/pay", "POST", { amount, currency }),
+    request("/api/premium/pay", "POST", { amount, currency }),
 
   // POST /api/premium/verify  ← verify after redirect
   verify: (reference) =>
-    request("/premium/verify", "POST", { reference }),
+    request("/api/premium/verify", "POST", { reference }),
 
   // GET /api/premium/status
-  getStatus: () => request("/premium/status"),
+  getStatus: () => request("/api/premium/status"),
 
   // Local check (no API call)
   isPremium: () => getIsPremium(),
@@ -320,11 +321,11 @@ export const premiumAPI = {
 export const userAPI = {
 
   // GET /api/users/:id  ← view any profile
-  getProfile: (id) => request(`/users/${id}`),
+  getProfile: (id) => request(`/api/users/${id}`),
 
   // PUT /api/users/profile  ← edit own profile
   updateProfile: (data) =>
-    request("/users/profile", "PUT", {
+    request("/api/users/profile", "PUT", {
       name:     data.name?.trim(),
       bio:      data.bio?.trim()      || "",
       age:      Number(data.age)      || undefined,
@@ -334,13 +335,13 @@ export const userAPI = {
 
   // PUT /api/users/photo  ← update profile photo URL
   updatePhoto: (photoUrl) =>
-    request("/users/photo", "PUT", { photo: photoUrl }),
+    request("/api/users/photo", "PUT", { photo: photoUrl }),
 
   // PUT /api/users/online  ← update online status
   setOnlineStatus: (isOnline) =>
-    request("/users/online", "PUT", { isOnline }),
+    request("/api/users/online", "PUT", { isOnline }),
 
   // DELETE /api/users/account  ← delete account
   deleteAccount: () =>
-    request("/users/account", "DELETE").then(() => clearAuth()),
+    request("/api/users/account", "DELETE").then(() => clearAuth()),
 };

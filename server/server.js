@@ -22,11 +22,23 @@ const connectDB  = require('./config/db');
 
 const app    = express();
 const server = http.createServer(app);
-const io     = new Server(server, {
-  cors: { origin: 'http://localhost:5173', credentials: true }
-});
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+// CORS configuration - allow multiple localhost ports for development
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow all localhost variants for development
+    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1') || origin === 'http://localhost:5173') {
+      callback(null, true);
+    } else {
+      callback(null, process.env.CORS_ORIGIN || origin);
+    }
+  },
+  credentials: true
+};
+
+const io     = new Server(server, { cors: corsOptions });
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes

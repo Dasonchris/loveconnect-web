@@ -22,7 +22,6 @@ export default function App() {
           <Route path="/community" element={<Community />} />
           <Route path="/self-chat" element={<SelfChat />} />
           <Route path="/chat/:id" element={<Chat />} />
-           <Route path="/chat/:userId" element={<Chat />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -27,9 +27,7 @@ export default function Matches() {
         await Promise.allSettled(
           result.map(async (m) => {
             try {
-              const res = await chatAPI.getUnreadCount
-                ? chatAPI.getUnreadCount(m._id)
-                : Promise.resolve({ count: 0 });
+              const res = await chatAPI.getUnreadCount(m._id);
               counts[m._id] = res?.count || 0;
             } catch {
               counts[m._id] = 0;

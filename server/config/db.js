@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
 
   console.log('🔍 Connecting to MongoDB...');
   console.log('URI:', uri ? uri.substring(0, 20) + '...' : 'UNDEFINED ❌');

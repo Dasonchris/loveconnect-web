@@ -23,7 +23,7 @@ const products = [
   { name: 'Weekend Getaway', price: 120, image: '', category: 'experiences' },
 ];
 
-mongoose.connect(process.env.MONGO_URI).then(async () => {
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URI).then(async () => {
   await Product.deleteMany({});
   await Product.insertMany(products);
   console.log('✅ Products seeded!');

@@ -42,6 +42,13 @@ export default function Home() {
   const [matchPopup,   setMatchPopup]   = useState(null);  // shows "It's a match!" screen
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
+  // Debug: Log current auth state
+  useEffect(() => {
+    console.log("🔐 Auth state check:");
+    console.log("  Token:", localStorage.getItem("token") ? "✅ Found" : "❌ Not found");
+    console.log("  isLoggedIn():", isLoggedIn());
+  }, []);
+
   // ── Load users ───────────────────────────────────────
   useEffect(() => {
     const load = async () => {
@@ -70,12 +77,16 @@ export default function Home() {
 
   // ── Like button ──────────────────────────────────────
   const handleLike = async (user) => {
+    console.log("❤️ Like clicked for:", user.name);
+    console.log("Is logged in?", isLoggedIn());
+    
     setSelectedUser(user);
     setLikedCards(prev => [...prev, user._id]);
 
     // Not logged in → show register popup
     if (!isLoggedIn()) {
-      setTimeout(() => setShowPopup(true), 250);
+      console.log("Not logged in - showing popup");
+      setShowPopup(true);  // Remove setTimeout for immediate display
       return;
     }
 
@@ -89,9 +100,10 @@ export default function Home() {
         setLikedCards(prev => prev.filter(id => id !== user._id));
       }, 400);
 
-      // Mutual match found
+      // Mutual match found → open chat immediately
       if (res.match) {
-        setMatchPopup(user);
+        navigate(`/chat/${user._id}`, { state: user });
+        return;
       }
     } catch (err) {
       console.error("Like error:", err);
@@ -158,11 +170,12 @@ export default function Home() {
 
       // 6️⃣ Show match popup or go to matches
       if (isMatch) {
-        setMatchPopup(selectedUser);
-      } else {
-        // Show success then redirect to matches
-        setMatchPopup({ ...selectedUser, pendingMatch: true });
+        navigate(`/chat/${selectedUser._id}`, { state: selectedUser });
+        return;
       }
+
+      // Show success then redirect to matches
+      setMatchPopup({ ...selectedUser, pendingMatch: true });
 
     } catch (err) {
       setErrors({ general: err.message });
@@ -285,6 +298,9 @@ export default function Home() {
                 src={selectedUser.photo || `https://ui-avatars.com/api/?name=${selectedUser.name}&background=ff4d6d&color=fff&size=120`}
                 alt={selectedUser.name}
                 className="popup-avatar"
+                onError={e => {
+                  e.target.src = `https://ui-avatars.com/api/?name=${selectedUser.name}&background=ff4d6d&color=fff&size=120`;
+                }}
               />
             </div>
 

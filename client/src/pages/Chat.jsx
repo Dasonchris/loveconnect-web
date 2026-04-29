@@ -1,7 +1,7 @@
 // client/src/pages/Chat.jsx
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { chatAPI } from "../api";           // ← fix: was matchAPI
+import { chatAPI, blindAPI } from "../api";
 import "./Chat.css";
 
 // ── Phone number detection ───────────────────────────
@@ -14,24 +14,39 @@ export default function Chat() {
   const { id }     = useParams();
   const navigate   = useNavigate();
 
+  const isValidObjectId = (value) => /^[0-9a-fA-F]{24}$/.test(value);
+
   // ── Derive user info safely ──────────────────────────
   const user         = state?.match ?? state ?? { name: `User ${id}`, photo: "" };
   const isPremium    = state?.isPremium    || localStorage.getItem("isPremium") === "true";
-  const messageLimit = state?.messageLimit || 5;
   const isBlindDate  = state?.isBlindDate  || false;
+  const messageLimit = state?.messageLimit ?? (isBlindDate ? 6 : 5);
 
-  const [messages,     setMessages]     = useState([]);
-  const [input,        setInput]        = useState("");
-  const [locked,       setLocked]       = useState(false);
-  const [loading,      setLoading]      = useState(true);
-  const [phoneWarning, setPhoneWarning] = useState(false);
-  const [showPaywall,  setShowPaywall]  = useState(false);
-  const [sendError,    setSendError]    = useState("");
+  const [messages,       setMessages]       = useState([]);
+  const [input,          setInput]          = useState("");
+  const [locked,         setLocked]         = useState(false);
+  const [loading,        setLoading]        = useState(true);
+  const [phoneWarning,   setPhoneWarning]   = useState(false);
+  const [showPaywall,    setShowPaywall]    = useState(false);
+  const [paymentMethod,  setPaymentMethod]  = useState("momo");
+  const [paymentProvider,setPaymentProvider]= useState("MTN");
+  const [paymentAccount, setPaymentAccount] = useState("");
+  const [paymentName,    setPaymentName]    = useState("");
+  const [paymentError,   setPaymentError]   = useState("");
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [sendError,      setSendError]      = useState("");
 
   const bottomRef = useRef(null);
 
   // ── Load messages ────────────────────────────────────
   useEffect(() => {
+    if (!isValidObjectId(id)) {
+      setSendError("Invalid chat session. Please go back and try again.");
+      setLoading(false);
+      return;
+    }
+
     chatAPI.getMessages(id)
       .then(data => {
         setMessages(data);
@@ -109,8 +124,40 @@ export default function Chat() {
   };
 
   const handleUpgrade = () => {
-    setShowPaywall(false);
-    navigate("/blind");
+    setPaymentError("");
+    setPaymentMethod("momo");
+    setPaymentProvider("MTN");
+    setPaymentAccount("");
+    setPaymentName("");
+    setPaymentSuccess(false);
+    setShowPaywall(true);
+  };
+
+  const submitPayment = async () => {
+    setPaymentError("");
+    if (!paymentAccount.trim() || !paymentName.trim()) {
+      setPaymentError("Enter your payment account and account name.");
+      return;
+    }
+
+    setPaymentLoading(true);
+    try {
+      await blindAPI.upgradeToPremium({
+        method:      paymentMethod,
+        provider:    paymentProvider,
+        account:     paymentAccount.trim(),
+        accountName: paymentName.trim(),
+      });
+      localStorage.setItem("isPremium", "true");
+      setPaymentSuccess(true);
+      setLocked(false);
+      setShowPaywall(false);
+    } catch (err) {
+      setPaymentError(err.message || "Payment failed. Please try again.");
+      console.error(err);
+    } finally {
+      setPaymentLoading(false);
+    }
   };
 
   // ────────────────────────────────────────────────────
@@ -262,21 +309,88 @@ export default function Chat() {
               <li>🚫 Phone numbers blocked for safety</li>
             </ul>
 
-            <div className="paywall-price">
-              <span className="price-amount">$9.99</span>
-              <span className="price-period">/ month</span>
+            <div className="paywall-tabs">
+              <button
+                className={paymentMethod === "momo" ? "pay-tab active" : "pay-tab"}
+                onClick={() => setPaymentMethod("momo")}
+                disabled={paymentLoading}
+              >
+                Mobile Money
+              </button>
+              <button
+                className={paymentMethod === "bank" ? "pay-tab active" : "pay-tab"}
+                onClick={() => setPaymentMethod("bank")}
+                disabled={paymentLoading}
+              >
+                Bank Transfer
+              </button>
             </div>
+
+            <div className="payment-fields">
+              {paymentMethod === "momo" ? (
+                <label>
+                  Network
+                  <select
+                    value={paymentProvider}
+                    onChange={e => setPaymentProvider(e.target.value)}
+                  >
+                    <option value="MTN">MTN Mobile Money</option>
+                    <option value="Vodafone">Vodafone Cash</option>
+                    <option value="AirtelTigo">AirtelTigo Money</option>
+                    <option value="Orange">Orange Money</option>
+                  </select>
+                </label>
+              ) : (
+                <label>
+                  Bank Name
+                  <select
+                    value={paymentProvider}
+                    onChange={e => setPaymentProvider(e.target.value)}
+                  >
+                    <option value="Access Bank">Access Bank</option>
+                    <option value="GCB Bank">GCB Bank</option>
+                    <option value="Ecobank">Ecobank</option>
+                    <option value="Stanbic Bank">Stanbic Bank</option>
+                    <option value="Zenith Bank">Zenith Bank</option>
+                  </select>
+                </label>
+              )}
+
+              <label>
+                {paymentMethod === "momo" ? "Phone Number" : "Account Number"}
+                <input
+                  value={paymentAccount}
+                  onChange={e => setPaymentAccount(e.target.value)}
+                  placeholder={paymentMethod === "momo" ? "e.g. 0244123456" : "e.g. 0123456789"}
+                />
+              </label>
+
+              <label>
+                Account Name
+                <input
+                  value={paymentName}
+                  onChange={e => setPaymentName(e.target.value)}
+                  placeholder="Your full name"
+                />
+              </label>
+            </div>
+
+            {paymentError && (
+              <div className="payment-error">⚠️ {paymentError}</div>
+            )}
 
             <button
               className="paywall-upgrade-btn"
-              onClick={handleUpgrade}
+              onClick={submitPayment}
+              disabled={paymentLoading}
             >
-              ✨ Upgrade Now
+              {paymentLoading ? "Processing..." : "✨ Pay and Unlock Premium"}
             </button>
 
             <button
               className="paywall-cancel-btn"
               onClick={() => setShowPaywall(false)}
+              disabled={paymentLoading}
             >
               Maybe Later
             </button>

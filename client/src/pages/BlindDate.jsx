@@ -1,8 +1,9 @@
-import { useState }    from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { blindAPI, isLoggedIn } from "../api";
 import "./BlindDate.css";
 
-// ── Simulated payment state (replace with real payment later) ──
+// ── Premium upgrade price ─────────────────────────────────
 const PREMIUM_PRICE = 9.99;
 
 // ✅ ADD: generate valid Mongo-style ObjectId
@@ -14,26 +15,52 @@ const PREMIUM_PRICE = 9.99;
 export default function BlindDate() {
   const navigate = useNavigate();
 
-  const [status,     setStatus]     = useState("locked");
-  const [match,      setMatch]      = useState(null);
-  const [progress,   setProgress]   = useState(0);
-  const [isPremium,  setIsPremium]  = useState(
+  const [status,        setStatus]        = useState("locked");
+  const [match,         setMatch]         = useState(null);
+  const [progress,      setProgress]      = useState(0);
+  const [isPremium,     setIsPremium]     = useState(
     () => localStorage.getItem("isPremium") === "true"
   );
-  const [showPaywall,  setShowPaywall]  = useState(false);
-  const [payLoading,   setPayLoading]   = useState(false);
-  const [paySuccess,   setPaySuccess]   = useState(false);
+  const [messageLimit,  setMessageLimit]  = useState(6);
+  const [showPaywall,   setShowPaywall]   = useState(false);
+  const [payLoading,    setPayLoading]    = useState(false);
+  const [paySuccess,    setPaySuccess]    = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("momo");
+  const [paymentProvider, setPaymentProvider] = useState("MTN");
+  const [account,       setAccount]       = useState("");
+  const [accountName,   setAccountName]   = useState("");
+  const [paymentError,  setPaymentError]  = useState("");
 
-  const MATCHES = [
-    { id: "blind-1", name: "Anonymous Match", vibe: "Calm & Funny 😌",       compatibility: 91 },
-    { id: "blind-2", name: "Mystery Person",  vibe: "Adventurous & Bold 🔥", compatibility: 87 },
-    { id: "blind-3", name: "Secret Admirer",  vibe: "Romantic & Deep 💫",    compatibility: 94 },
-  ];
+  // ── Go to blind chat ────────────────────────────────────
+  const openChat = () => {
+    navigate(`/chat/${match.id}`, {
+      state: {
+        match,
+        isPremium,
+        messageLimit:  isPremium ? 9999 : 6,
+        isBlindDate:   true,
+      },
+    });
+  };
 
-  // ── Find match ─────────────────────────────────────────
+  useEffect(() => {
+    const loadStatus = async () => {
+      if (!isLoggedIn()) return;
+      try {
+        const status = await blindAPI.getPremiumStatus();
+        setIsPremium(status.isPremium);
+        setMessageLimit(status.isPremium ? 999 : 6);
+      } catch (err) {
+        console.error("Failed to load premium status:", err);
+      }
+    };
+    loadStatus();
+  }, []);
+
   const startMatching = () => {
     setStatus("matching");
     setProgress(0);
+    setPaymentError("");
 
     let p = 0;
     const iv = setInterval(() => {
@@ -42,38 +69,62 @@ export default function BlindDate() {
       if (p >= 100) clearInterval(iv);
     }, 100);
 
-    setTimeout(() => {
-      const random = MATCHES[Math.floor(Math.random() * MATCHES.length)];
-      setMatch(random);
-      setStatus("match_found");
+    setTimeout(async () => {
+      try {
+        if (!isLoggedIn()) {
+          setStatus("locked");
+          setPaymentError("Please register or log in before using Blind Date.");
+          return;
+        }
+
+        const data = await blindAPI.findMatch();
+        setMatch({
+          id:            data.id,
+          name:          data.name,
+          vibe:          data.vibe,
+          compatibility: data.compatibility,
+        });
+        setIsPremium(data.isPremium);
+        setMessageLimit(data.messageLimit || 6);
+        setStatus("match_found");
+      } catch (err) {
+        console.error(err);
+        setStatus("locked");
+        setPaymentError(err.message || "Unable to find a match right now.");
+      }
     }, 2000);
   };
 
-  // ── Go to blind chat ────────────────────────────────────
-  const openChat = () => {
-    navigate(`/chat/${match.id}`, {
-      state: {
-        match,
-        isPremium,
-        messageLimit:  isPremium ? 9999 : 5,
-        isBlindDate:   true,
-      },
-    });
-  };
+  const handlePayment = async () => {
+    setPaymentError("");
+    if (!account.trim() || !accountName.trim()) {
+      setPaymentError("Enter your account number and account name.");
+      return;
+    }
 
-  // ── Simulate payment ────────────────────────────────────
-  const handlePayment = () => {
     setPayLoading(true);
-    setTimeout(() => {
+    try {
+      await blindAPI.upgradeToPremium({
+        method:      paymentMethod,
+        provider:    paymentProvider,
+        account:     account.trim(),
+        accountName: accountName.trim(),
+      });
+
       localStorage.setItem("isPremium", "true");
       setIsPremium(true);
-      setPayLoading(false);
+      setMessageLimit(999);
       setPaySuccess(true);
       setTimeout(() => {
         setShowPaywall(false);
         setPaySuccess(false);
       }, 1800);
-    }, 2000);
+    } catch (err) {
+      setPaymentError(err.message || "Payment failed. Please try again.");
+      console.error(err);
+    } finally {
+      setPayLoading(false);
+    }
   };
 
   const tryAgain = () => {
@@ -102,9 +153,12 @@ export default function BlindDate() {
           </p>
           {!isPremium && (
             <div className="free-info">
-              <span>🆓 Free: 5 messages</span>
+              <span>🆓 Free: 6 messages</span>
               <span>✨ Premium: Unlimited + reveal identity</span>
             </div>
+          )}
+          {paymentError && (
+            <div className="error-text">⚠️ {paymentError}</div>
           )}
           <button className="blind-btn primary" onClick={startMatching}>
             Start Matching 🚀
@@ -166,7 +220,7 @@ export default function BlindDate() {
               <p className="limit-premium">✨ Premium — Unlimited messages</p>
             ) : (
               <p className="limit-free">
-                🆓 Free chat — <b>5 messages</b> then upgrade to continue
+                🆓 Free chat — <b>6 messages</b> then upgrade to continue
               </p>
             )}
           </div>
@@ -220,10 +274,84 @@ export default function BlindDate() {
                   <li>🚫 Phone numbers blocked for safety</li>
                 </ul>
 
-                <div className="paywall-price">
-                  <span className="price-amount">${PREMIUM_PRICE}</span>
-                  <span className="price-period">/ month</span>
+                <div className="paywall-tabs">
+                  <button
+                    className={paymentMethod === "momo" ? "pay-tab active" : "pay-tab"}
+                    onClick={() => setPaymentMethod("momo")}
+                    disabled={payLoading}
+                  >
+                    Mobile Money
+                  </button>
+                  <button
+                    className={paymentMethod === "bank" ? "pay-tab active" : "pay-tab"}
+                    onClick={() => setPaymentMethod("bank")}
+                    disabled={payLoading}
+                  >
+                    Bank Transfer
+                  </button>
                 </div>
+
+                {paymentMethod === "momo" ? (
+                  <div className="payment-fields">
+                    <label>
+                      Network
+                      <select
+                        value={paymentProvider}
+                        onChange={e => setPaymentProvider(e.target.value)}
+                      >
+                        <option value="MTN">MTN Mobile Money</option>
+                        <option value="Vodafone">Vodafone Cash</option>
+                        <option value="AirtelTigo">AirtelTigo Money</option>
+                        <option value="Orange">Orange Money</option>
+                      </select>
+                    </label>
+                    <label>
+                      Phone Number
+                      <input
+                        value={account}
+                        onChange={e => setAccount(e.target.value)}
+                        placeholder="e.g. 0244123456"
+                      />
+                    </label>
+                  </div>
+                ) : (
+                  <div className="payment-fields">
+                    <label>
+                      Bank Name
+                      <select
+                        value={paymentProvider}
+                        onChange={e => setPaymentProvider(e.target.value)}
+                      >
+                        <option value="Access Bank">Access Bank</option>
+                        <option value="GCB Bank">GCB Bank</option>
+                        <option value="Ecobank">Ecobank</option>
+                        <option value="Stanbic Bank">Stanbic Bank</option>
+                        <option value="Zenith Bank">Zenith Bank</option>
+                      </select>
+                    </label>
+                    <label>
+                      Account Number
+                      <input
+                        value={account}
+                        onChange={e => setAccount(e.target.value)}
+                        placeholder="e.g. 0123456789"
+                      />
+                    </label>
+                  </div>
+                )}
+
+                <label>
+                  Account Name
+                  <input
+                    value={accountName}
+                    onChange={e => setAccountName(e.target.value)}
+                    placeholder="Your full name"
+                  />
+                </label>
+
+                {paymentError && (
+                  <div className="payment-error">⚠️ {paymentError}</div>
+                )}
 
                 <button
                   className="blind-btn primary"

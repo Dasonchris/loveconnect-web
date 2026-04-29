@@ -396,6 +396,62 @@
   gap: 4px;
 }
 
+.paywall-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+.pay-tab {
+  flex: 1;
+  background: rgba(255,255,255,0.92);
+  color: #c9184a;
+  border: 1px solid rgba(201, 25, 138, 0.2);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.pay-tab.active {
+  background: linear-gradient(135deg, #ffdde1, #ffe4ec);
+}
+
+.payment-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.payment-fields label {
+  font-size: 13px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.payment-fields input,
+.payment-fields select {
+  width: 100%;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: white;
+  color: #333;
+}
+
+.payment-error {
+  background: #ffe9ed;
+  color: #b42318;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
 .price-amount {
   font-size: 30px;
   font-weight: 800;

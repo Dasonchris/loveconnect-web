@@ -1,10 +1,17 @@
 // server/controllers/chatController.js
+const mongoose = require('mongoose');
 const Message  = require('../models/Message');
 const SelfNote = require('../models/SelfNote');
+
+const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
 
 // GET /api/chat/:userId  ← load messages in Chat.jsx
 exports.getMessages = async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.userId)) {
+      return res.status(400).json({ message: 'Invalid chat user ID' });
+    }
+
     const messages = await Message.find({
       deleted: false,
       $or: [
@@ -27,7 +34,11 @@ exports.sendMessage = async (req, res) => {
     if (!text?.trim())
       return res.status(400).json({ message: 'Message cannot be empty' });
 
-    // Enforce message limit for free users (5 messages)
+    if (!isValidObjectId(receiverId)) {
+      return res.status(400).json({ message: 'Invalid receiver ID' });
+    }
+
+    // Enforce message limit for free users (6 messages)
     const user = req.user;
     if (!user.isPremium && isBlindDate) {
       const count = await Message.countDocuments({
@@ -35,11 +46,11 @@ exports.sendMessage = async (req, res) => {
         receiver:    receiverId,
         isBlindDate: true,
       });
-      if (count >= 5)
+      if (count >= 6)
         return res.status(403).json({
           message:  'Message limit reached',
           upgrade:  true,
-          limit:    5,
+          limit:    6,
         });
     }
 
@@ -70,6 +81,26 @@ exports.deleteMessage = async (req, res) => {
     message.deleted = true;
     await message.save();
     res.json({ message: 'Deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// GET /api/chat/unread/:userId
+exports.getUnreadCount = async (req, res) => {
+  try {
+    if (!isValidObjectId(req.params.userId)) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    const count = await Message.countDocuments({
+      sender:   req.params.userId,
+      receiver: req.user._id,
+      read:     false,
+      deleted:  false,
+    });
+
+    res.json({ count });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

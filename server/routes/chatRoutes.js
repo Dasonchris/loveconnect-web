@@ -6,11 +6,12 @@ const {
   getNotes, addNote, deleteNote
 } = require('../controllers/chatController');
 
-router.get('/notes',     auth, getNotes);
-router.post('/notes',    auth, addNote);
+router.get('/notes',        auth, getNotes);
+router.post('/notes',       auth, addNote);
 router.delete('/notes/:id', auth, deleteNote);
-router.get('/:userId',   auth, getMessages);
-router.post('/send',     auth, sendMessage);
-router.delete('/:id',    auth, deleteMessage);
+router.get('/unread/:userId', auth, getUnreadCount);
+router.get('/:userId',      auth, getMessages);
+router.post('/send',        auth, sendMessage);
+router.delete('/:id',       auth, deleteMessage);
 
 module.exports = router;

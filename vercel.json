@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "client/dist",
+  "public": false,
+  "regions": ["iad1"],
+  "env": {
+    "VITE_API_URL": "@vite_api_url",
+    "CORS_ORIGIN": "@cors_origin"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -52,6 +52,22 @@ a.links:hover {
   color: rgba(245, 245, 245, 0.925);
 }
 
+.logout-btn {
+  background: none;
+  border: none;
+  color: black;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff4d6d;
+  color: rgba(245, 245, 245, 0.925);
+}
+
 
 /* =========================
    Nav Links Wrapper

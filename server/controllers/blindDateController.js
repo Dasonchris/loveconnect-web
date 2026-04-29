@@ -34,8 +34,48 @@ exports.findMatch = async (req, res) => {
       vibe,
       compatibility,
       isPremium:     me.isPremium,
-      messageLimit:  me.isPremium ? 999 : 5,
+      messageLimit:  me.isPremium ? 999 : 6,
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// POST /api/blind/upgrade  ← upgrade user to premium via bank or mobile money
+exports.upgradeToPremium = async (req, res) => {
+  try {
+    const { method, provider, account, accountName } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user)
+      return res.status(404).json({ message: 'User not found' });
+
+    user.isPremium = true;
+    await user.save();
+
+    res.json({
+      message: 'Premium activated successfully',
+      premium: true,
+      payment: {
+        method,
+        provider,
+        account,
+        accountName,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// GET /api/blind/status  ← return current premium status
+exports.getPremiumStatus = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user)
+      return res.status(404).json({ message: 'User not found' });
+
+    res.json({ isPremium: user.isPremium });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
