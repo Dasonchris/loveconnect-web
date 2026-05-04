@@ -1,26 +1,11 @@
 // server/server.js
-const fs   = require('fs');
+const fs = require('fs');
 const path = require('path');
-
-// Manually load .env
-const envPath = path.join(__dirname, '.env');
-if (fs.existsSync(envPath)) {
-  fs.readFileSync(envPath, 'utf-8').split('\n').forEach(line => {
-    const trimmed = line.trim();
-    if (trimmed && !trimmed.startsWith('#')) {
-      const [key, ...rest] = trimmed.split('=');
-      process.env[key.trim()] = rest.join('=').trim();
-    }
-  });
-}
-
-const express    = require('express');
-const http       = require('http');
+const http = require('http');
+const express = require('express');
 const { Server } = require('socket.io');
-const cors       = require('cors');
-const connectDB  = require('./config/db');
+const { app, connectDB } = require('./app');
 
-const app    = express();
 const server = http.createServer(app);
 
 // CORS configuration - allow multiple localhost ports for development
@@ -36,37 +21,15 @@ const corsOptions = {
   credentials: true
 };
 
-const io     = new Server(server, { cors: corsOptions });
+const io = new Server(server, { cors: corsOptions });
 
-app.use(cors(corsOptions));
-app.use(express.json());
-
-// Routes
-app.use('/api/auth',        require('./routes/authRoutes'));
-app.use('/api/matches',     require('./routes/matchRoutes'));
-app.use('/api/chat',        require('./routes/chatRoutes'));
-app.use('/api/community',   require('./routes/communityRoutes'));
-app.use('/api/marketplace', require('./routes/marketplaceRoutes'));
-app.use('/api/blind',       require('./routes/blindDateRoutes'));
-
-// Health check
-app.get('/', (req, res) => res.json({
-  status:  '❤️  LoveConnect API running',
-  routes: [
-    'POST /api/auth/register',
-    'POST /api/auth/login',
-    'GET  /api/matches/users',
-    'POST /api/matches/like/:id',
-    'GET  /api/matches',
-    'GET  /api/chat/:userId',
-    'POST /api/chat/send',
-    'GET  /api/community',
-    'POST /api/community',
-    'GET  /api/marketplace',
-    'POST /api/marketplace/purchase/:id',
-    'GET  /api/blind/match',
-  ]
-}));
+const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
 
 // Socket.IO — real time chat
 io.on('connection', (socket) => {
@@ -84,5 +47,14 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 5000;
 connectDB().then(() => {
-  server.listen(PORT, () => console.log(`🚀 Server on http://localhost:${PORT}`));
+  server.listen(PORT)
+    .on('listening', () => console.log(`🚀 Server on http://localhost:${PORT}`))
+    .on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use. Stop the other process or set PORT=<anotherPort> before starting.`);
+      } else {
+        console.error('Server error:', err);
+      }
+      process.exit(1);
+    });
 });
