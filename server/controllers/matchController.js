@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Match = require("../models/Match");
+const ActivityLog = require("../models/ActivityLog");
 
 // ── Get swipe users ────────────────────────────────
 exports.getUsers = async (req, res) => {
@@ -30,6 +31,12 @@ exports.likeUser = async (req, res) => {
     if (!user.likes.includes(targetId)) {
       user.likes.push(targetId);
       await user.save();
+
+      await ActivityLog.create({
+        userId: user._id,
+        action: 'like',
+        details: { targetId, targetName: target.name },
+      });
     }
 
     // 🔥 Check mutual like
@@ -46,6 +53,12 @@ exports.likeUser = async (req, res) => {
           users: [userId, targetId],
         });
       }
+
+      await ActivityLog.create({
+        userId: user._id,
+        action: 'match',
+        details: { targetId, targetName: target.name },
+      });
 
       return res.json({ match: true });
     }
@@ -66,6 +79,12 @@ exports.dislikeUser = async (req, res) => {
 
     await User.findByIdAndUpdate(userId, {
       $addToSet: { dislikes: targetId },
+    });
+
+    await ActivityLog.create({
+      userId,
+      action: 'dislike',
+      details: { targetId },
     });
 
     res.json({ success: true });

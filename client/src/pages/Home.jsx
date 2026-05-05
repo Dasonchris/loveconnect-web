@@ -40,7 +40,13 @@ export default function Home() {
   const [submitting,   setSubmitting]   = useState(false);
   const [likedCards,   setLikedCards]   = useState([]);
   const [matchPopup,   setMatchPopup]   = useState(null);  // shows "It's a match!" screen
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    dateOfBirth: "",
+    occupation: "",
+  });
 
   // Debug: Log current auth state
   useEffect(() => {
@@ -128,11 +134,20 @@ export default function Home() {
   // ── Validate form ────────────────────────────────────
   const validate = () => {
     const e = {};
-    if (!form.name.trim())                        e.name     = "Name is required";
-    if (!form.email.trim())                       e.email    = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(form.email))   e.email    = "Invalid email";
-    if (!form.password)                           e.password = "Password is required";
-    else if (form.password.length < 6)            e.password = "Min 6 characters";
+    if (!form.name.trim())                        e.name        = "Name is required";
+    if (!form.email.trim())                       e.email       = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(form.email))   e.email       = "Invalid email";
+    if (!form.password)                           e.password    = "Password is required";
+    else if (form.password.length < 6)            e.password    = "Min 6 characters";
+    if (!form.dateOfBirth)                        e.dateOfBirth = "Date of birth is required";
+    else {
+      const dob = new Date(form.dateOfBirth);
+      const today = new Date();
+      const age = today.getFullYear() - dob.getFullYear() - (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate()) ? 1 : 0);
+      if (Number.isNaN(dob.getTime()))           e.dateOfBirth = "Invalid date";
+      else if (age < 18)                         e.dateOfBirth = "You must be at least 18 years old";
+    }
+    if (!form.occupation.trim())                  e.occupation  = "Occupation is required";
     return e;
   };
 
@@ -166,7 +181,7 @@ export default function Home() {
 
       // 5️⃣ Close register popup
       setShowPopup(false);
-      setForm({ name: "", email: "", password: "" });
+      setForm({ name: "", email: "", password: "", dateOfBirth: "", occupation: "" });
 
       // 6️⃣ Show match popup or go to matches
       if (isMatch) {
@@ -188,6 +203,7 @@ export default function Home() {
   const closePopup = () => {
     setShowPopup(false);
     setErrors({});
+    setForm({ name: "", email: "", password: "", dateOfBirth: "", occupation: "" });
     setLikedCards(prev => prev.filter(id => id !== selectedUser?._id));
   };
 
@@ -370,6 +386,33 @@ export default function Home() {
                 className={errors.email ? "input-error" : ""}
               />
               {errors.email && <span className="error-msg">{errors.email}</span>}
+            </div>
+
+            {/* Occupation */}
+            <div className="input-group">
+              <input
+                name="occupation"
+                type="text"
+                placeholder="Your occupation"
+                value={form.occupation}
+                onChange={handleChange}
+                className={errors.occupation ? "input-error" : ""}
+              />
+              {errors.occupation && <span className="error-msg">{errors.occupation}</span>}
+            </div>
+
+            {/* Date of birth */}
+            <div className="input-group">
+              <input
+                name="dateOfBirth"
+                type="date"
+                placeholder="Date of birth"
+                value={form.dateOfBirth}
+                onChange={handleChange}
+                className={errors.dateOfBirth ? "input-error" : ""}
+                max={new Date().toISOString().split("T")[0]}
+              />
+              {errors.dateOfBirth && <span className="error-msg">{errors.dateOfBirth}</span>}
             </div>
 
             {/* Password of user*/}

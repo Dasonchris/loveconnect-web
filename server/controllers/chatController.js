@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const Message  = require('../models/Message');
 const SelfNote = require('../models/SelfNote');
+const ActivityLog = require('../models/ActivityLog');
 
 const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
 
@@ -59,6 +60,12 @@ exports.sendMessage = async (req, res) => {
       receiver:    receiverId,
       text,
       isBlindDate: isBlindDate || false,
+    });
+
+    await ActivityLog.create({
+      userId: req.user._id,
+      action: 'send_message',
+      details: { receiverId, text: text.slice(0, 100) },
     });
 
     res.status(201).json(message);

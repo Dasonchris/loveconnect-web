@@ -1,0 +1,62 @@
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('./config/db');
+
+// Manually load .env for local and build environments
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  fs.readFileSync(envPath, 'utf-8').split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#')) {
+      const [key, ...rest] = trimmed.split('=');
+      process.env[key.trim()] = rest.join('=').trim();
+    }
+  });
+}
+
+const app = express();
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1') || origin === 'http://localhost:5173') {
+      callback(null, true);
+    } else {
+      callback(null, process.env.CORS_ORIGIN || origin);
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+
+app.use('/api/auth',        require('./routes/authRoutes'));
+app.use('/api/admin',       require('./routes/adminRoutes'));
+app.use('/api/matches',     require('./routes/matchRoutes'));
+app.use('/api/chat',        require('./routes/chatRoutes'));
+app.use('/api/community',   require('./routes/communityRoutes'));
+app.use('/api/marketplace', require('./routes/marketplaceRoutes'));
+app.use('/api/blind',       require('./routes/blindDateRoutes'));
+
+app.get('/api/status', (req, res) => res.json({
+  status:  '❤️  LoveConnect API running',
+  routes: [
+    'POST /api/auth/register',
+    'POST /api/auth/login',
+    'GET  /api/matches/users',
+    'POST /api/matches/like/:id',
+    'GET  /api/matches',
+    'GET  /api/chat/:userId',
+    'POST /api/chat/send',
+    'GET  /api/community',
+    'POST /api/community',
+    'GET  /api/marketplace',
+    'POST /api/marketplace/purchase/:id',
+    'GET  /api/blind/match',
+  ]
+}));
+
+
+module.exports = { app, connectDB, corsOptions };

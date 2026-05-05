@@ -3,6 +3,7 @@ const router = require('express').Router();
 const auth   = require('../middleware/authMiddleware');
 const {
   getMessages, sendMessage, deleteMessage,
+  getUnreadCount,
   getNotes, addNote, deleteNote
 } = require('../controllers/chatController');
 

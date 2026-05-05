@@ -53,6 +53,21 @@ exports.upgradeToPremium = async (req, res) => {
     user.isPremium = true;
     await user.save();
 
+    // Log payment activity
+    const ActivityLog = require('../models/ActivityLog');
+    await ActivityLog.create({
+      userId: req.user._id,
+      action: 'payment',
+      details: {
+        method,
+        provider,
+        account,
+        accountName,
+        amount: 9.99,
+        currency: 'USD',
+      },
+    });
+
     res.json({
       message: 'Premium activated successfully',
       premium: true,
@@ -74,6 +89,14 @@ exports.getPremiumStatus = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user)
       return res.status(404).json({ message: 'User not found' });
+
+    // Log login activity
+    const ActivityLog = require('../models/ActivityLog');
+    await ActivityLog.create({
+      userId: req.user._id,
+      action: 'login',
+      details: { userName: user.name },
+    }).catch(() => {}); // Don't fail if logging fails
 
     res.json({ isPremium: user.isPremium });
   } catch (err) {

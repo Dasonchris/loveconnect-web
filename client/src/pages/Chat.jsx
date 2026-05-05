@@ -30,11 +30,10 @@ export default function Chat() {
   const [showPaywall,    setShowPaywall]    = useState(false);
   const [paymentMethod,  setPaymentMethod]  = useState("momo");
   const [paymentProvider,setPaymentProvider]= useState("MTN");
-  const [paymentAccount, setPaymentAccount] = useState("");
+  const [paymentAccount, setPaymentAccount] = useState("0598580995");
   const [paymentName,    setPaymentName]    = useState("");
   const [paymentError,   setPaymentError]   = useState("");
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [sendError,      setSendError]      = useState("");
 
   const bottomRef = useRef(null);
@@ -60,7 +59,7 @@ export default function Chat() {
         setMessages([]);
       })
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, isBlindDate, isPremium, messageLimit]);
 
   // ── Auto scroll ──────────────────────────────────────
   useEffect(() => {
@@ -123,16 +122,6 @@ export default function Chat() {
     if (e.key === "Enter") sendMessage();
   };
 
-  const handleUpgrade = () => {
-    setPaymentError("");
-    setPaymentMethod("momo");
-    setPaymentProvider("MTN");
-    setPaymentAccount("");
-    setPaymentName("");
-    setPaymentSuccess(false);
-    setShowPaywall(true);
-  };
-
   const submitPayment = async () => {
     setPaymentError("");
     if (!paymentAccount.trim() || !paymentName.trim()) {
@@ -149,7 +138,6 @@ export default function Chat() {
         accountName: paymentName.trim(),
       });
       localStorage.setItem("isPremium", "true");
-      setPaymentSuccess(true);
       setLocked(false);
       setShowPaywall(false);
     } catch (err) {
@@ -312,14 +300,20 @@ export default function Chat() {
             <div className="paywall-tabs">
               <button
                 className={paymentMethod === "momo" ? "pay-tab active" : "pay-tab"}
-                onClick={() => setPaymentMethod("momo")}
+                onClick={() => {
+                  setPaymentMethod("momo");
+                  setPaymentAccount("0598580995");
+                }}
                 disabled={paymentLoading}
               >
                 Mobile Money
               </button>
               <button
                 className={paymentMethod === "bank" ? "pay-tab active" : "pay-tab"}
-                onClick={() => setPaymentMethod("bank")}
+                onClick={() => {
+                  setPaymentMethod("bank");
+                  setPaymentAccount("12345567890123");
+                }}
                 disabled={paymentLoading}
               >
                 Bank Transfer
@@ -361,7 +355,8 @@ export default function Chat() {
                 <input
                   value={paymentAccount}
                   onChange={e => setPaymentAccount(e.target.value)}
-                  placeholder={paymentMethod === "momo" ? "e.g. 0244123456" : "e.g. 0123456789"}
+                  placeholder={paymentMethod === "momo" ? "0598580995" : "12345567890123"}
+                  readOnly
                 />
               </label>
 

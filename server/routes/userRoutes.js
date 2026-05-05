@@ -1,8 +1,16 @@
-const Match = require("../models/Match");
-const User = require("../models/User");
+const router = require('express').Router();
+const auth = require('../middleware/authMiddleware');
+const Match = require('../models/Match');
+const User = require('../models/User');
+const { getUserStats, getUserActivity, getUserMessages } = require('../controllers/userController');
+
+// Dashboard routes - user-specific data
+router.get('/dashboard/stats', auth, getUserStats);
+router.get('/dashboard/activity', auth, getUserActivity);
+router.get('/dashboard/messages', auth, getUserMessages);
 
 // POST /api/users/:id/like
-router.post("/:id/like", async (req, res) => {
+router.post('/:id/like', async (req, res) => {
   try {
     const userId = req.user.id;       // logged in user
     const targetId = req.params.id;   // user being liked
@@ -11,7 +19,7 @@ router.post("/:id/like", async (req, res) => {
     const target = await User.findById(targetId);
 
     if (!user || !target) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     // Add like if not already
@@ -42,6 +50,8 @@ router.post("/:id/like", async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: 'Server error' });
   }
 });
+
+module.exports = router;

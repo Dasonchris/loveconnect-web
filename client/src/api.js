@@ -1,5 +1,5 @@
 // client/src/api.js
-const BASE_URL = "";
+const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 
 // ════════════════════════════════════════════════════════
@@ -107,9 +107,11 @@ export const authAPI = {
   // POST /api/auth/register  ← Home.jsx popup
   register: (formData) =>
     request("/api/auth/register", "POST", {
-      name:     formData.name?.trim(),
-      email:    formData.email?.trim().toLowerCase(),
-      password: formData.password,
+      name:        formData.name?.trim(),
+      email:       formData.email?.trim().toLowerCase(),
+      password:    formData.password,
+      dateOfBirth: formData.dateOfBirth,
+      occupation:  formData.occupation?.trim(),
     }),
 
   // POST /api/auth/login

@@ -27,7 +27,7 @@ export default function BlindDate() {
   const [paySuccess,    setPaySuccess]    = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("momo");
   const [paymentProvider, setPaymentProvider] = useState("MTN");
-  const [account,       setAccount]       = useState("");
+  const [account,       setAccount]       = useState("0598580995");
   const [accountName,   setAccountName]   = useState("");
   const [paymentError,  setPaymentError]  = useState("");
 
@@ -277,14 +277,20 @@ export default function BlindDate() {
                 <div className="paywall-tabs">
                   <button
                     className={paymentMethod === "momo" ? "pay-tab active" : "pay-tab"}
-                    onClick={() => setPaymentMethod("momo")}
+                    onClick={() => {
+                      setPaymentMethod("momo");
+                      setAccount("0598580995");
+                    }}
                     disabled={payLoading}
                   >
                     Mobile Money
                   </button>
                   <button
                     className={paymentMethod === "bank" ? "pay-tab active" : "pay-tab"}
-                    onClick={() => setPaymentMethod("bank")}
+                    onClick={() => {
+                      setPaymentMethod("bank");
+                      setAccount("12345567890123");
+                    }}
                     disabled={payLoading}
                   >
                     Bank Transfer
@@ -310,7 +316,8 @@ export default function BlindDate() {
                       <input
                         value={account}
                         onChange={e => setAccount(e.target.value)}
-                        placeholder="e.g. 0244123456"
+                        placeholder="0598580995"
+                        readOnly
                       />
                     </label>
                   </div>
@@ -334,7 +341,8 @@ export default function BlindDate() {
                       <input
                         value={account}
                         onChange={e => setAccount(e.target.value)}
-                        placeholder="e.g. 0123456789"
+                        placeholder="12345567890123"
+                        readOnly
                       />
                     </label>
                   </div>

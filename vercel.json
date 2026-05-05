@@ -1,17 +1,31 @@
 {
   "version": 2,
+  "installCommand": "npm install && npm install --prefix client",
   "buildCommand": "npm run build",
   "outputDirectory": "client/dist",
-  "public": false,
   "regions": ["iad1"],
   "env": {
-    "VITE_API_URL": "@vite_api_url",
-    "CORS_ORIGIN": "@cors_origin"
+    "VITE_API_URL": "",
+    "CORS_ORIGIN": "",
+    "MONGO_URI": ""
   },
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "api.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "(.*)",
+      "dest": "/index.html"
     }
   ]
 }

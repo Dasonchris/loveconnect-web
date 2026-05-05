@@ -2,12 +2,15 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  name:     { type: String, required: true, trim: true },
-  email:    { type: String, required: true, unique: true, lowercase: true },
-  password: { type: String, required: true },
-  age:      { type: Number },
-  bio:      { type: String, default: '' },
-  photo:    { type: String, default: '' },
+  name:        { type: String, required: true, trim: true },
+  email:       { type: String, required: true, unique: true, lowercase: true },
+  password:    { type: String, required: true },
+  dateOfBirth: { type: Date,   required: true },
+  occupation:  { type: String, required: true, trim: true },
+  age:         { type: Number, required: true },
+  verified:    { type: Boolean, default: false },
+  bio:         { type: String, default: '' },
+  photo:       { type: String, default: '' },
   isOnline: { type: Boolean, default: false },
   isPremium:{ type: Boolean, default: false },
   likes:    [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
