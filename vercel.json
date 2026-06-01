@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "installCommand": "NPM_CONFIG_PRODUCTION=false npm install && NPM_CONFIG_PRODUCTION=false npm install --prefix server && NPM_CONFIG_PRODUCTION=false npm install --prefix client",
-  "buildCommand": "npm run build",
+  "installCommand": "npm install && npm install --prefix server && npm install --prefix client",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "client/dist",
   "regions": ["iad1"],
   "env": {
-    "VITE_API_URL": "",
-    "CORS_ORIGIN": "",
-    "MONGO_URI": ""
+    "VITE_API_URL": "http://localhost:5000/api",
+    "CORS_ORIGIN": "http://localhost:3000",
+    "MONGO_URI": "mongodb://localhost:27017/loveconnect"
   },
   "builds": [
     {

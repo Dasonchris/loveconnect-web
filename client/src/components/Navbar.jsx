@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { isLoggedIn, clearAuth, getCurrentUser } from "../api";
 import "./Navbar.css";
@@ -6,7 +6,9 @@ import AdBanner from './AdBanner';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const user = getCurrentUser();
+  const location = useLocation();
+  const showUserLinks = isLoggedIn() && location.pathname === "/";
+  const showRegisterButton = !isLoggedIn() && !location.pathname.startsWith("/admin");
 
   const handleLogout = () => {
     clearAuth();
@@ -25,7 +27,7 @@ export default function Navbar() {
         <Link className="links" to="/blind">Blinddate</Link>
         <Link className="links" to="/marketplace">Marketplace</Link>
         <Link className="links" to="/community">Community</Link>
-        {isLoggedIn() && (
+        {showUserLinks && (
           <>
             <Link className="links" to="/dashboard">Dashboard</Link>
             <Link className="links" to="/profile">Profile</Link>
@@ -34,7 +36,7 @@ export default function Navbar() {
             </button>
           </>
         )}
-        {!isLoggedIn() && (
+        {showRegisterButton && (
           <Link className="nav-register-btn animate" to="/?register=true">
             Register to save your profile
           </Link>
