@@ -27,12 +27,12 @@ exports.getMessages = async (req, res) => {
   }
 };
 
-// POST /api/chat/send  ← send message in Chat.jsx
+// POST /api/chat/send  ← send message with photos
 exports.sendMessage = async (req, res) => {
   try {
-    const { receiverId, text, isBlindDate } = req.body;
+    const { receiverId, text, isBlindDate, photos } = req.body;
 
-    if (!text?.trim())
+    if (!text?.trim() && (!photos || photos.length === 0))
       return res.status(400).json({ message: 'Message cannot be empty' });
 
     if (!isValidObjectId(receiverId)) {
@@ -58,14 +58,15 @@ exports.sendMessage = async (req, res) => {
     const message = await Message.create({
       sender:      req.user._id,
       receiver:    receiverId,
-      text,
+      text:        text?.trim() || '',
+      photos:      photos || [],
       isBlindDate: isBlindDate || false,
     });
 
     await ActivityLog.create({
       userId: req.user._id,
       action: 'send_message',
-      details: { receiverId, text: text.slice(0, 100) },
+      details: { receiverId, text: text?.slice(0, 100) },
     });
 
     res.status(201).json(message);
@@ -88,6 +89,49 @@ exports.deleteMessage = async (req, res) => {
     message.deleted = true;
     await message.save();
     res.json({ message: 'Deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// PUT /api/chat/reaction/:id  ← add emoji reaction to message
+exports.addReaction = async (req, res) => {
+  try {
+    const { emoji } = req.body;
+    if (!emoji)
+      return res.status(400).json({ message: 'Emoji required' });
+
+    const message = await Message.findById(req.params.id);
+    if (!message)
+      return res.status(404).json({ message: 'Message not found' });
+
+    // Remove existing reaction from user, if any
+    message.reactions = message.reactions.filter(
+      r => r.user.toString() !== req.user._id.toString()
+    );
+
+    // Add new reaction if provided
+    if (emoji) {
+      message.reactions.push({
+        user: req.user._id,
+        emoji,
+      });
+    }
+
+    await message.save();
+    await message.populate('reactions.user', 'name');
+    res.json({ reactions: message.reactions });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// PUT /api/chat/typing/:userId  ← notify typing status
+exports.setTyping = async (req, res) => {
+  try {
+    const { typing } = req.body;
+    // This will be handled via Socket.IO in real-time
+    res.json({ typing });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -22,10 +22,16 @@ export default function AdminLogin() {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      let data = null;
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch {
+        data = { message: text };
+      }
 
       if (!res.ok) {
-        setError(data.message || 'Login failed');
+        setError(data?.message || 'Login failed');
         setLoading(false);
         return;
       }

@@ -231,6 +231,15 @@
   font-size: 16px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions button img {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .actions button:active { transform: scale(0.93); }

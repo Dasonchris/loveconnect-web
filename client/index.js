@@ -18,9 +18,15 @@ const request = async (endpoint, options = {}) => {
   };
 
   const res  = await fetch(`${BASE_URL}${endpoint}`, config);
-  const data = await res.json();
+  const text = await res.text();
+  let data = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = { message: text };
+  }
 
-  if (!res.ok) throw new Error(data.message || 'Something went wrong');
+  if (!res.ok) throw new Error(data?.message || 'Something went wrong');
   return data;
 };
 

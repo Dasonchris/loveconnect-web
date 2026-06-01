@@ -35,8 +35,10 @@ export default function Chat() {
   const [paymentError,   setPaymentError]   = useState("");
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [sendError,      setSendError]      = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(null);
 
   const bottomRef = useRef(null);
+  const emojis = ["❤️", "😂", "😮", "😢", "😡", "🔥", "👍", "🎉"];
 
   // ── Load messages ────────────────────────────────────
   useEffect(() => {
@@ -115,6 +117,18 @@ export default function Chat() {
       setMessages(prev => prev.filter(m => m._id !== msgId));
     } catch (err) {
       console.error("Delete failed:", err);
+    }
+  };
+
+  // ── Add reaction to message ──────────────────────────
+  const addMessageReaction = async (msgId, emoji) => {
+    try {
+      await chatAPI.addReaction(msgId, emoji);
+      const data = await chatAPI.getMessages(id);
+      setMessages(data);
+      setShowEmojiPicker(null);
+    } catch (err) {
+      console.error("Failed to add reaction:", err);
     }
   };
 
@@ -197,7 +211,27 @@ export default function Chat() {
         {/* Messages */}
         {messages.map(msg => (
           <div key={msg._id || msg.id} className="message my-message">
-            <span className="message-text">{msg.text}</span>
+            <div className="message-content">
+              <span className="message-text">{msg.text}</span>
+              {msg.photos && msg.photos.length > 0 && (
+                <div className="message-photos">
+                  {msg.photos.map((photo, idx) => (
+                    <img key={idx} src={photo} alt={`msg-${idx}`} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {msg.reactions && msg.reactions.length > 0 && (
+              <div className="message-reactions">
+                {msg.reactions.map((reaction, idx) => (
+                  <span key={idx} className="reaction">
+                    {reaction.emoji}
+                  </span>
+                ))}
+              </div>
+            )}
+
             <div className="message-footer">
               <small>
                 {msg.createdAt
@@ -207,13 +241,37 @@ export default function Chat() {
                     })
                   : msg.time || ""}
               </small>
-              <button
-                className="delete-btn"
-                onClick={() => deleteMessage(msg._id)}
-                aria-label="Delete message"
-              >
-                🗑️
-              </button>
+
+              <div className="message-actions">
+                <button
+                  className="emoji-trigger"
+                  onClick={() => setShowEmojiPicker(showEmojiPicker === msg._id ? null : msg._id)}
+                >
+                  😊
+                </button>
+
+                {showEmojiPicker === msg._id && (
+                  <div className="emoji-picker-popup">
+                    {emojis.map(emoji => (
+                      <button
+                        key={emoji}
+                        className="emoji-choice"
+                        onClick={() => addMessageReaction(msg._id, emoji)}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteMessage(msg._id)}
+                  aria-label="Delete message"
+                >
+                  🗑️
+                </button>
+              </div>
             </div>
           </div>
         ))}

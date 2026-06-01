@@ -52,6 +52,40 @@ a.links:hover {
   color: rgba(245, 245, 245, 0.925);
 }
 
+/* Register hint styled as a button */
+.nav-register-btn {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #ff6a83 0%, #c9184a 50%, #ff4d6d 100%);
+  background-size: 200% 200%;
+  color: white;
+  border-radius: 24px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem; /* match primary link size */
+  box-shadow: 0 6px 18px rgba(201, 25, 74, 0.18);
+  transition: transform 180ms ease, box-shadow 180ms ease, background-position 600ms ease, opacity 180ms ease;
+  will-change: transform, background-position;
+}
+.nav-register-btn:hover {
+  opacity: 0.95;
+  transform: translateY(-3px) scale(1.02);
+  background-position: 100% 0%;
+  box-shadow: 0 10px 24px rgba(201, 25, 74, 0.22);
+}
+.nav-register-btn:active { transform: translateY(-1px) scale(0.995); }
+
+/* subtle floating animation to draw attention */
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+.nav-register-btn.animate {
+  animation: floaty 3.6s ease-in-out infinite;
+}
+
 .logout-btn {
   background: none;
   border: none;
@@ -122,6 +156,7 @@ a.links:hover {
     font-size: 1rem;
     padding: 10px 14px;
   }
+  .nav-register-btn { font-size: 1rem; padding: 10px 14px; }
 }
 
 
@@ -142,6 +177,7 @@ a.links:hover {
     font-size: 0.95rem;
     padding: 9px 12px;
   }
+  .nav-register-btn { font-size: 0.95rem; padding: 9px 12px; }
 }
 
 
@@ -162,6 +198,7 @@ a.links:hover {
     font-size: 0.9rem;
     padding: 8px 10px;
   }
+  .nav-register-btn { font-size: 0.9rem; padding: 8px 10px; }
 }
 
 
@@ -221,6 +258,7 @@ a.links:hover {
     width: 100%;
     border-radius: 8px;
   }
+  .nav-register-btn { width: 100%; border-radius: 8px; padding: 10px 12px; text-align: center; }
 }
 
 
@@ -260,4 +298,5 @@ a.links:hover {
     width: 100%;
     border-radius: 8px;
   }
+  .nav-register-btn { width: 100%; border-radius: 8px; padding: 10px 12px; text-align: center; }
 }

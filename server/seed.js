@@ -15,12 +15,12 @@ const mongoose = require('mongoose');
 const Product  = require('./models/Product');
 
 const products = [
-  { name: 'Dinner Date',     price: 50,  image: '', category: 'experiences' },
-  { name: 'Movie Ticket',    price: 15,  image: '', category: 'experiences' },
-  { name: 'Gift Box',        price: 30,  image: '', category: 'gifts'       },
-  { name: 'Flowers',         price: 20,  image: '', category: 'gifts'       },
-  { name: 'Chocolate Pack',  price: 25,  image: '', category: 'gifts'       },
-  { name: 'Weekend Getaway', price: 120, image: '', category: 'experiences' },
+  { name: 'Dinner Date',     price: 50,  image: '', category: 'experiences', featured: true },
+  { name: 'Movie Ticket',    price: 15,  image: '', category: 'experiences', featured: true },
+  { name: 'Gift Box',        price: 30,  image: '', category: 'gifts',       featured: false },
+  { name: 'Flowers',         price: 20,  image: '', category: 'gifts',       featured: false },
+  { name: 'Chocolate Pack',  price: 25,  image: '', category: 'gifts',       featured: true },
+  { name: 'Weekend Getaway', price: 120, image: '', category: 'experiences', featured: true },
 ];
 
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URI).then(async () => {

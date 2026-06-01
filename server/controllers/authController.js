@@ -26,8 +26,11 @@ const calculateAge = (dateOfBirth) => {
 exports.register = async (req, res) => {
   try {
     const { name, email, password, dateOfBirth, occupation } = req.body;
+    const trimmedName = String(name || "").trim();
+    const trimmedEmail = String(email || "").trim();
+    const trimmedOccupation = String(occupation || "").trim();
 
-    if (!name || !email || !password || !dateOfBirth || !occupation)
+    if (!trimmedName || !trimmedEmail || !password || !dateOfBirth || !trimmedOccupation)
       return res.status(400).json({ message: 'All fields are required' });
 
     const age = calculateAge(dateOfBirth);
@@ -37,23 +40,23 @@ exports.register = async (req, res) => {
     if (age < 18)
       return res.status(400).json({ message: 'You must be 18 or older to register' });
 
-    const exists = await User.findOne({ email });
+    const exists = await User.findOne({ email: trimmedEmail });
     if (exists)
       return res.status(400).json({ message: 'Email already registered' });
 
     const hashed = await bcrypt.hash(password, 10);
     const user   = await User.create({
-      name,
-      email,
+      name: trimmedName,
+      email: trimmedEmail,
       password: hashed,
       dateOfBirth: new Date(dateOfBirth),
-      occupation: occupation.trim(),
+      occupation: trimmedOccupation,
       age,
     });
     await ActivityLog.create({
       userId: user._id,
       action: 'register',
-      details: { email, occupation: occupation.trim(), age },
+      details: { email: trimmedEmail, occupation: trimmedOccupation, age },
     });
 
     const token  = generateToken(user._id);

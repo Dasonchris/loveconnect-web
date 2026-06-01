@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema({
   description: { type: String, default: '' },
   image:       { type: String, default: '' },
   category:    { type: String, default: 'other' },
+  featured:    { type: Boolean, default: false },
   sold:        { type: Boolean, default: false },
   soldTo:      { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   soldMessage: { type: String, default: '' },

@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { isLoggedIn, clearAuth } from "../api";
+import { isLoggedIn, clearAuth, getCurrentUser } from "../api";
 import "./Navbar.css";
+import AdBanner from './AdBanner';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const user = getCurrentUser();
 
   const handleLogout = () => {
     clearAuth();
@@ -24,10 +26,24 @@ export default function Navbar() {
         <Link className="links" to="/marketplace">Marketplace</Link>
         <Link className="links" to="/community">Community</Link>
         {isLoggedIn() && (
-          <button className="links logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
+          <>
+            <Link className="links" to="/dashboard">Dashboard</Link>
+            <Link className="links" to="/profile">Profile</Link>
+            <button className="links logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
         )}
+        {!isLoggedIn() && (
+          <Link className="nav-register-btn animate" to="/?register=true">
+            Register to save your profile
+          </Link>
+        )}
+      </div>
+
+      {/* Inline compact ad shown on all pages */}
+      <div className="nav-ad">
+        <AdBanner compact />
       </div>
 
       {/* Hamburger Button */}

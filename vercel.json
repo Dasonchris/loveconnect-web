@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "installCommand": "npm install && npm install --prefix client",
+  "installCommand": "NPM_CONFIG_PRODUCTION=false npm install && NPM_CONFIG_PRODUCTION=false npm install --prefix server && NPM_CONFIG_PRODUCTION=false npm install --prefix client",
   "buildCommand": "npm run build",
   "outputDirectory": "client/dist",
   "regions": ["iad1"],

@@ -1,5 +1,5 @@
 // client/src/api.js
-const BASE_URL = import.meta.env.VITE_API_URL || "";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 
 // ════════════════════════════════════════════════════════
@@ -90,7 +90,7 @@ const request = async (endpoint, method = "GET", body = null) => {
     // Server is down or no internet
     if (err.message === "Failed to fetch") {
       throw new Error(
-        "Cannot connect to server. Make sure the backend is running on port 5000."
+        "Cannot connect to server. Make sure the backend is running on port 5000 or set VITE_API_URL."
       );
     }
     console.error(`❌ API [${method} ${endpoint}]:`, err.message);
@@ -107,11 +107,11 @@ export const authAPI = {
   // POST /api/auth/register  ← Home.jsx popup
   register: (formData) =>
     request("/api/auth/register", "POST", {
-      name:        formData.name?.trim(),
-      email:       formData.email?.trim().toLowerCase(),
-      password:    formData.password,
-      dateOfBirth: formData.dateOfBirth,
-      occupation:  formData.occupation?.trim(),
+      name:        formData.name?.trim() || "",
+      email:       formData.email?.trim().toLowerCase() || "",
+      password:    formData.password || "",
+      dateOfBirth: formData.dateOfBirth || "",
+      occupation:  formData.occupation?.trim() || "",
     }),
 
   // POST /api/auth/login
@@ -164,21 +164,30 @@ export const chatAPI = {
   getMessages: (userId) =>
     request(`/api/chat/${userId}`),
 
-  // POST /api/chat/send  ← send message
-  sendMessage: (receiverId, text, isBlindDate = false) =>
+  // POST /api/chat/send  ← send message with photos
+  sendMessage: (receiverId, text, isBlindDate = false, photos = []) =>
     request("/api/chat/send", "POST", {
       receiverId,
       text:        text?.trim(),
       isBlindDate,
+      photos,
     }),
 
   // DELETE /api/chat/:id  ← delete message
   deleteMessage: (id) =>
     request(`/api/chat/${id}`, "DELETE"),
 
+  // PUT /api/chat/reaction/:id  ← add emoji reaction
+  addReaction: (id, emoji) =>
+    request(`/api/chat/reaction/${id}`, "PUT", { emoji }),
+
   // PUT /api/chat/read/:userId  ← mark messages as read
   markAsRead: (userId) =>
     request(`/api/chat/read/${userId}`, "PUT"),
+
+  // PUT /api/chat/typing/:userId  ← notify typing
+  setTyping: (userId, typing) =>
+    request(`/api/chat/typing/${userId}`, "PUT", { typing }),
 
   // GET /api/chat/unread/:userId  ← unread badge on Matches
   getUnreadCount: (userId) =>
@@ -216,19 +225,31 @@ export const communityAPI = {
   getPosts: (page = 1) =>
     request(`/api/community?page=${page}`),
 
-  // POST /api/community  ← create post
-  createPost: (text) =>
-    request("/api/community", "POST", { text: text?.trim() }),
+  // POST /api/community  ← create post with photos
+  createPost: (text, photos = []) =>
+    request("/api/community", "POST", { 
+      text: text?.trim(),
+      photos,
+    }),
 
   // PUT /api/community/like/:id  ← toggle like
   likePost: (id) =>
     request(`/api/community/like/${id}`, "PUT"),
 
+  // PUT /api/community/reaction/:id  ← add emoji reaction
+  addReaction: (id, emoji) =>
+    request(`/api/community/reaction/${id}`, "PUT", { emoji }),
+
   // POST /api/community/comment/:id  ← add comment
-  addComment: (id, text) =>
+  addComment: (id, text, photo = '') =>
     request(`/api/community/comment/${id}`, "POST", {
       text: text?.trim(),
+      photo,
     }),
+
+  // DELETE /api/community/:id/photo/:photoIndex  ← delete photo
+  deletePhoto: (id, photoIndex) =>
+    request(`/api/community/${id}/photo/${photoIndex}`, "DELETE"),
 
   // DELETE /api/community/:id  ← delete own post
   deletePost: (id) =>
@@ -246,6 +267,9 @@ export const marketplaceAPI = {
     request(
       `/api/marketplace${search ? `?search=${encodeURIComponent(search)}` : ""}`
     ),
+
+  // GET featured products for adverts
+  getFeatured: (limit = 5) => request(`/api/marketplace/featured?limit=${limit}`),
 
   // POST /api/marketplace/purchase/:id  ← buy product
   purchaseProduct: (id, name, message = "") =>
@@ -346,4 +370,52 @@ export const userAPI = {
   // DELETE /api/users/account  ← delete account
   deleteAccount: () =>
     request("/api/users/account", "DELETE").then(() => clearAuth()),
+};
+
+
+// ════════════════════════════════════════════════════════
+//  ADMIN API (uses adminToken in localStorage)
+// ════════════════════════════════════════════════════════
+const getAdminToken = () => localStorage.getItem('adminToken');
+
+const adminRequest = async (endpoint, method = 'GET', body = null) => {
+  const token = getAdminToken();
+  const config = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    ...(body && { body: JSON.stringify(body) }),
+  };
+
+  const res = await fetch(`${BASE_URL}${endpoint}`, config);
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch { data = { message: text }; }
+  if (!res.ok) throw new Error(data?.message || `Admin request failed: ${res.status}`);
+  return data;
+};
+
+export const adminAPI = {
+  // GET /api/admin/messages?page=&limit=&search=&includeDeleted=true
+  getMessages: (opts = {}) => {
+    const params = new URLSearchParams();
+    if (opts.page) params.set('page', opts.page);
+    if (opts.limit) params.set('limit', opts.limit);
+    if (opts.search) params.set('search', opts.search);
+    if (opts.includeDeleted) params.set('includeDeleted', 'true');
+    return adminRequest(`/api/admin/messages?${params.toString()}`);
+  },
+
+  getStats: () => adminRequest('/api/admin/stats'),
+  getUsers: () => adminRequest('/api/admin/users'),
+  getPayments: () => adminRequest('/api/admin/payments'),
+  getActivityLogs: () => adminRequest('/api/admin/activity-logs'),
+  verifyUser: (userId) => adminRequest(`/api/admin/users/${userId}/verify`, 'POST'),
+  deleteUser: (userId) => adminRequest(`/api/admin/users/${userId}`, 'DELETE'),
+  resetUserPassword: (userId) => adminRequest(`/api/admin/users/${userId}/reset-password`, 'POST'),
+  deleteMessage: (id) => adminRequest(`/api/admin/messages/${id}`, 'DELETE'),
+  markMessageRead: (id) => adminRequest(`/api/admin/messages/${id}/mark-read`, 'POST'),
+  restoreMessage: (id) => adminRequest(`/api/admin/messages/${id}/restore`, 'POST'),
 };

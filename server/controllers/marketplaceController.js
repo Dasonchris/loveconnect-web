@@ -17,6 +17,17 @@ exports.getProducts = async (req, res) => {
   }
 };
 
+// GET /api/marketplace/featured  ← lightweight public featured products for adverts
+exports.getFeatured = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 5;
+    const products = await Product.find({ featured: true, sold: { $ne: true } }).sort({ createdAt: -1 }).limit(limit);
+    res.json({ products });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // POST /api/marketplace/purchase/:id  ← confirm button in Marketplace.jsx
 exports.purchaseProduct = async (req, res) => {
   try {
@@ -54,6 +65,21 @@ exports.addProduct = async (req, res) => {
       name, price, description, image, category
     });
     res.status(201).json(product);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// PUT /api/marketplace/:id/feature  ← admin toggle featured
+exports.setFeatured = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { featured } = req.body;
+    const product = await Product.findById(id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    product.featured = !!featured;
+    await product.save();
+    res.json({ message: 'Updated featured flag', product });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

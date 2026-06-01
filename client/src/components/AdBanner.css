@@ -1,0 +1,33 @@
+.ad-banner {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0;
+  overflow-x: auto;
+}
+
+.ad-item {
+  min-width: 180px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.ad-item img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.ad-meta { display: flex; flex-direction: column; }
+.ad-name { font-weight: 600; color: #333; font-size: 14px; }
+.ad-price { color: #667eea; font-weight: 700; font-size: 13px; }
+
+.ad-compact { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+.ad-compact-title { color: #fff; font-weight: 600; background: linear-gradient(135deg,#667eea,#764ba2); padding: 6px 10px; border-radius: 8px; }
+.ad-compact-price { color: #333; font-weight: 700; margin-left: 6px; }

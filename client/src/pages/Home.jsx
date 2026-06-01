@@ -1,8 +1,11 @@
 // client/src/pages/Home.jsx
 import { useState, useEffect }          from "react";
-import { useNavigate }                  from "react-router-dom";
+import { useNavigate, useLocation }      from "react-router-dom";
 import { matchAPI, authAPI, saveSession, isLoggedIn } from "../api";
 import "./Home.css";
+import AdBanner from '../components/AdBanner';
+import likeIcon from '../Images/like.svg';
+import dislikeIcon from '../Images/dislike.svg';
 
 // ── Static users ─────────────────────────────────────
 const DUMMY_USERS = [
@@ -31,11 +34,13 @@ const HOBBY_COLORS = {
 
 export default function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [users,        setUsers]        = useState([]);
   const [showPopup,    setShowPopup]    = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading,      setLoading]      = useState(true);
+  const [registerOnly, setRegisterOnly] = useState(false);
   const [errors,       setErrors]       = useState({});
   const [submitting,   setSubmitting]   = useState(false);
   const [likedCards,   setLikedCards]   = useState([]);
@@ -81,12 +86,22 @@ export default function Home() {
     load();
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('register') === 'true' && !isLoggedIn()) {
+      setSelectedUser(null);
+      setRegisterOnly(true);
+      setShowPopup(true);
+    }
+  }, [location.search]);
+
   // ── Like button ──────────────────────────────────────
   const handleLike = async (user) => {
     console.log("❤️ Like clicked for:", user.name);
     console.log("Is logged in?", isLoggedIn());
     
     setSelectedUser(user);
+    setRegisterOnly(false);
     setLikedCards(prev => [...prev, user._id]);
 
     // Not logged in → show register popup
@@ -229,6 +244,7 @@ export default function Home() {
 
   return (
     <>
+      <AdBanner />
       {/* ══ CARD GRID ══ */}
       <div className="container">
         {users.length === 0 ? (
@@ -291,12 +307,16 @@ export default function Home() {
                   className="dislike"
                   onClick={() => handleDislike(user._id)}
                   aria-label="Dislike"
-                >❌</button>
+                >
+                  <img src={dislikeIcon} alt="Dislike" />
+                </button>
                 <button
                   className="like"
                   onClick={() => handleLike(user)}
                   aria-label="Like"
-                >❤️</button>
+                >
+                  <img src={likeIcon} alt="Like" />
+                </button>
               </div>
             </div>
           ))
