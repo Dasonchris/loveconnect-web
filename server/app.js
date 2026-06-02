@@ -32,6 +32,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Lazy DB connection on first request (non-blocking)
+let dbConnectionPromise = null;
+app.use((req, res, next) => {
+  // Don't block the request - start DB connection in background
+  if (!dbConnectionPromise) {
+    dbConnectionPromise = connectDB().catch(err => {
+      console.error('DB connection failed:', err.message);
+      dbConnectionPromise = null; // Reset for retry
+    });
+  }
+  next();
+});
+
 app.use('/api/auth',        require('./routes/authRoutes'));
 app.use('/api/admin',       require('./routes/adminRoutes'));
 app.use('/api/matches',     require('./routes/matchRoutes'));
