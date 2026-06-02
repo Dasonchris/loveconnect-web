@@ -4,9 +4,9 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
-// Manually load .env for local and build environments
+// Manually load .env for local development only
 const envPath = path.join(__dirname, '.env');
-if (fs.existsSync(envPath)) {
+if (process.env.NODE_ENV !== 'production' && fs.existsSync(envPath)) {
   fs.readFileSync(envPath, 'utf-8').split('\n').forEach(line => {
     const trimmed = line.trim();
     if (trimmed && !trimmed.startsWith('#')) {
@@ -58,5 +58,7 @@ app.get('/api/status', (req, res) => res.json({
   ]
 }));
 
+// Lightweight ping endpoint for quick routing checks
+app.get('/api/ping', (req, res) => res.type('text').send('pong'));
 
 module.exports = { app, connectDB, corsOptions };

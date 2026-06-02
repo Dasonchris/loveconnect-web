@@ -1,5 +1,12 @@
 // client/src/api.js
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const rawBaseUrl = import.meta.env.VITE_API_URL || "";
+const BASE_URL = rawBaseUrl.replace(/\/+$/, "");
+
+const buildUrl = (endpoint) => {
+  if (!endpoint) return BASE_URL || endpoint;
+  if (BASE_URL && endpoint.startsWith(BASE_URL)) return endpoint;
+  return `${BASE_URL}${endpoint}`;
+};
 
 
 // ════════════════════════════════════════════════════════
@@ -48,7 +55,7 @@ const request = async (endpoint, method = "GET", body = null) => {
   };
 
   try {
-    const res = await fetch(`${BASE_URL}${endpoint}`, config);
+    const res = await fetch(buildUrl(endpoint), config);
 
     // Read raw text first — prevents crash on empty responses
     const text = await res.text();
@@ -389,7 +396,7 @@ const adminRequest = async (endpoint, method = 'GET', body = null) => {
     ...(body && { body: JSON.stringify(body) }),
   };
 
-  const res = await fetch(`${BASE_URL}${endpoint}`, config);
+  const res = await fetch(buildUrl(endpoint), config);
   const text = await res.text();
   let data = null;
   try { data = text ? JSON.parse(text) : null; } catch { data = { message: text }; }

@@ -5,20 +5,18 @@
   "outputDirectory": "client/dist",
   "regions": ["iad1"],
   "env": {
-    "VITE_API_URL": "http://localhost:5000/api",
-    "CORS_ORIGIN": "http://localhost:3000",
-    "MONGO_URI": "mongodb://localhost:27017/loveconnect"
+    "VITE_API_URL": "/api"
   },
-  "builds": [
-    {
-      "src": "api.js",
-      "use": "@vercel/node"
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 10,
+      "memory": 1024
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api.js"
+      "dest": "/api/index.js"
     },
     {
       "handle": "filesystem"
